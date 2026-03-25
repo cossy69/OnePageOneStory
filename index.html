@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ký Ức Xứ Thanh</title>
+    <style>
+      :root {
+        --gold: #d4af37;
+        --dark: #121212;
+        --text: #e0e0e0;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--dark);
+        color: var(--text);
+        overflow-x: hidden;
+      }
+
+      #start-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--dark);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+          opacity 1s ease,
+          visibility 1s ease;
+      }
+      #start-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .start-title {
+        color: var(--gold);
+        font-size: 4rem;
+        font-family: "Times New Roman", serif;
+        margin-bottom: 20px;
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+      }
+      .start-hint {
+        color: var(--text);
+        font-size: 1.2rem;
+        border-bottom: 1px dashed var(--gold);
+        padding-bottom: 5px;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.4;
+        }
+      }
+
+      #timeline {
+        position: fixed;
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        z-index: 100;
+      }
+      .time-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #555;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+      }
+      .time-dot::after {
+        content: attr(data-year);
+        position: absolute;
+        left: 25px;
+        top: -4px;
+        color: #555;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+      .time-dot.active {
+        background: var(--gold);
+        box-shadow: 0 0 12px var(--gold);
+      }
+      .time-dot.active::after {
+        color: var(--gold);
+      }
+
+      section {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10% 0 15%;
+        position: relative;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(18, 18, 18, 0.85);
+        z-index: 1;
+      }
+      .content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .content.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .content h2 {
+        color: var(--gold);
+        font-size: 3.5rem;
+        margin-bottom: 25px;
+        font-family: "Times New Roman", serif;
+        font-weight: normal;
+      }
+      .content p {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        text-align: justify;
+      }
+
+      .keyword {
+        color: var(--gold);
+        text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+        cursor: help;
+        position: relative;
+        border-bottom: 1px dashed var(--gold);
+      }
+      .keyword::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 150%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: 300px;
+        background: rgba(20, 20, 20, 0.95);
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 4px;
+        border: 1px solid var(--gold);
+        font-size: 0.95rem;
+        line-height: 1.4;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        text-align: left;
+      }
+      .keyword::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 6px;
+        border-style: solid;
+        border-color: var(--gold) transparent transparent transparent;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+      .keyword:hover::before,
+      .keyword:hover::after {
+        opacity: 1;
+        visibility: visible;
+        bottom: calc(150% + 5px);
+      }
+      .keyword:hover::after {
+        bottom: calc(100% + 5px);
+      }
+
+      #sec1 {
+        background-image: url("images/chauai.jpg");
+      }
+      #sec2 {
+        background-image: url("images/batrieu.jpg");
+      }
+      #sec3 {
+        background-image: url("images/lamson.jpg");
+      }
+      #sec4 {
+        background-image: url("images/thanhhoa.jpg");
+      }
+      #sec5 {
+        background-image: url("images/nhadao.jpg");
+      }
+    </style>
+  </head>
+  <body>
+    <div id="start-screen">
+      <div class="start-title">Ký Ức Xứ Thanh</div>
+      <div class="start-hint">Click bất kỳ đâu để bắt đầu hành trình</div>
+    </div>
+
+    <div id="timeline">
+      <div
+        class="time-dot active"
+        data-year="Thưở sơ khai"
+        onclick="scrollToSec('sec1')"
+      ></div>
+      <div
+        class="time-dot"
+        data-year="Thế kỷ III"
+        onclick="scrollToSec('sec2')"
+      ></div>
+      <div
+        class="time-dot"
+        data-year="Thế kỷ XV"
+        onclick="scrollToSec('sec3')"
+      ></div>
+      <div
+        class="time-dot"
+        data-year="Thế kỷ XI - XIX"
+        onclick="scrollToSec('sec4')"
+      ></div>
+      <div
+        class="time-dot"
+        data-year="Hiện đại"
+        onclick="scrollToSec('sec5')"
+      ></div>
+    </div>
+
+    <section id="sec1" data-index="0">
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Nguồn Gốc Cửu Chân</h2>
+        <p>
+          Thuở hồng hoang, vùng đất này được gọi là
+          <span
+            class="keyword"
+            data-tooltip="Tên gọi cổ của vùng Thanh Hóa - Nghệ An thời kỳ đầu Bắc thuộc"
+            >Cửu Chân</span
+          >, sau đó đổi thành
+          <span
+            class="keyword"
+            data-tooltip="Tên gọi phổ biến thời nhà Tùy, nhà Đường"
+            >Châu Ái</span
+          >. Nơi đây là cái nôi của nền
+          <span
+            class="keyword"
+            data-tooltip="Nền văn hóa đồ đá mới rực rỡ cách đây khoảng 6000 năm"
+            >văn hóa Đa Bút</span
+          >
+          và
+          <span
+            class="keyword"
+            data-tooltip="Nền văn hóa đồ đồng nổi tiếng với những chiếc trống đồng tinh xảo"
+            >văn hóa Đông Sơn</span
+          >
+          rực rỡ, với biểu tượng trống đồng mang đậm bản sắc người Việt cổ quần
+          tụ ven bờ sông Mã.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec2" data-index="1">
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Dấu Ấn Lịch Sử</h2>
+        <p>
+          Trải qua bao thăng trầm, vùng đất Ái Châu đã chứng kiến những cuộc
+          khởi nghĩa oanh liệt. Nổi bật nhất là dấu chân của
+          <span
+            class="keyword"
+            data-tooltip="Nữ anh hùng dân tộc Triệu Thị Trinh lãnh đạo khởi nghĩa chống quân Ngô năm 248"
+            >Bà Triệu</span
+          >
+          trên đỉnh
+          <span
+            class="keyword"
+            data-tooltip="Ngọn núi linh thiêng tại Triệu Sơn, nơi Bà Triệu dấy binh khởi nghĩa"
+            >núi Nưa</span
+          >, vang vọng lời thề "cưỡi cơn gió mạnh, đạp luồng sóng dữ, chém cá
+          kình ở biển Đông" chứ nhất quyết không chịu cúi đầu làm tì thiếp cho
+          người.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec3" data-index="2">
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Hào Khí Lam Sơn</h2>
+        <p>
+          Đến thế kỷ 15, từ vùng núi rừng
+          <span
+            class="keyword"
+            data-tooltip="Căn cứ địa của cuộc khởi nghĩa Lam Sơn thuộc huyện Thọ Xuân ngày nay"
+            >Lam Sơn</span
+          >, một trang sử vàng lại được viết lên. Nơi đây
+          <span
+            class="keyword"
+            data-tooltip="Lời thề anh em kết nghĩa của 19 hào kiệt phò tá Lê Lợi"
+            >hội thề Lũng Nhai</span
+          >
+          đã kết nối những anh hùng hào kiệt, nuôi dưỡng ý chí quật cường của Lê
+          Lợi và Nguyễn Trãi, ròng rã mười năm nếm mật nằm gai để đánh đuổi quân
+          Minh, lập nên vương triều nhà Lê huy hoàng.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec4" data-index="3">
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Danh Xưng Thanh Hóa</h2>
+        <p>
+          Danh xưng "Thanh Hóa" chính thức xuất hiện dưới thời vua
+          <span
+            class="keyword"
+            data-tooltip="Vị vua triều Lý, người đã đổi tên Ái Châu thành Thanh Hóa năm 1029"
+            >Lý Thái Tông</span
+          >. Trải dài đến triều Nguyễn, mảnh đất này luôn đóng vai trò trọng
+          yếu, được xem là
+          <span
+            class="keyword"
+            data-tooltip="Vùng đất cội nguồn phát tích của 3 triều vua (Tiền Lê, Hậu Lê, Nguyễn) và 2 triều chúa (Trịnh, Nguyễn)"
+            >đất căn bản</span
+          >, một phên dậu vững chắc bảo vệ sơn hà qua nhiều thời kỳ binh lửa.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec5" data-index="4">
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Vươn Mình Hiện Đại</h2>
+        <p>
+          Ngày nay, xứ Thanh đang chuyển mình mạnh mẽ. Người dân nơi đây vừa gìn
+          giữ nét đẹp rêu phong của
+          <span
+            class="keyword"
+            data-tooltip="Di sản văn hóa thế giới được UNESCO công nhận, xây dựng năm 1397 bằng đá xanh nguyên khối"
+            >Thành Nhà Hồ</span
+          >, vừa tự tin vươn lên xây dựng một trung tâm công nghiệp
+          <span
+            class="keyword"
+            data-tooltip="Khu kinh tế trọng điểm ven biển với hạt nhân là tổ hợp lọc hóa dầu"
+            >Nghi Sơn</span
+          >
+          sầm uất và những thành phố du lịch biển ngập tràn sức sống.
+        </p>
+      </div>
+    </section>
+
+    <script>
+      const tickSound = new Audio(
+        "data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU",
+      );
+      tickSound.volume = 0.3;
+
+      const bgmList = [
+        new Audio("audio/codai.mp3"),
+        new Audio("audio/batrieu.mp3"),
+        new Audio("audio/lamson.mp3"),
+        new Audio("audio/nhanguyen.mp3"),
+        new Audio("audio/songma.mp3"),
+      ];
+
+      bgmList.forEach((audio) => {
+        if (audio) audio.loop = true;
+      });
+
+      let currentBgm = null;
+      let currentIndex = 0;
+      let isStarted = false;
+
+      document
+        .getElementById("start-screen")
+        .addEventListener("click", function () {
+          this.classList.add("hidden");
+          isStarted = true;
+
+          tickSound
+            .play()
+            .then(() => {
+              tickSound.pause();
+              tickSound.currentTime = 0;
+            })
+            .catch((e) => {});
+
+          if (bgmList[currentIndex]) {
+            currentBgm = bgmList[currentIndex];
+            currentBgm.play().catch((e) => console.log(e));
+          }
+        });
+
+      const observerOptions = {
+        root: null,
+        rootMargin: "-10% 0px -10% 0px",
+        threshold: 0.5,
+      };
+
+      const dots = document.querySelectorAll(".time-dot");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const content = entry.target.querySelector(".content");
+            content.classList.add("visible");
+
+            const index = parseInt(entry.target.getAttribute("data-index"));
+
+            if (index !== currentIndex || !currentBgm) {
+              dots.forEach((dot) => dot.classList.remove("active"));
+              dots[index].classList.add("active");
+
+              if (isStarted) {
+                tickSound.currentTime = 0;
+                tickSound.play().catch((e) => {});
+              }
+
+              if (currentBgm) {
+                currentBgm.pause();
+                currentBgm.currentTime = 0;
+              }
+
+              if (bgmList[index] && isStarted) {
+                currentBgm = bgmList[index];
+                currentBgm.play().catch((e) => {});
+              } else {
+                currentBgm = null;
+              }
+
+              currentIndex = index;
+            }
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll("section").forEach((sec) => {
+        observer.observe(sec);
+      });
+
+      function scrollToSec(id) {
+        document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+      }
+    </script>
+  </body>
+</html>
