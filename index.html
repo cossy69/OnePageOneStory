@@ -72,6 +72,8 @@
         transition:
           opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
           visibility 1.2s;
+        padding: 0 20px;
+        text-align: center;
       }
       #start-screen.hidden {
         opacity: 0;
@@ -238,7 +240,6 @@
       }
       .keyword:hover {
         color: var(--gold);
-        cursor: none;
       }
       .keyword::before {
         content: attr(data-tooltip);
@@ -269,6 +270,89 @@
         transform: translateX(-50%) translateY(0);
       }
 
+      /* responsive cho màn hình nhỏ */
+      @media (max-width: 992px) {
+        section {
+          padding: 0 5% 0 10%;
+        }
+        .content {
+          padding: 40px;
+        }
+        .start-title {
+          font-size: 4rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        section {
+          padding: 0 5%;
+        }
+        .overlay {
+          background: rgba(10, 10, 10, 0.8);
+        } /* tối màu nền hơn trên mobile để dễ đọc chữ */
+        .content {
+          padding: 30px 20px;
+        }
+        .content h2 {
+          font-size: 2.2rem;
+          text-align: center;
+        }
+        .content p {
+          font-size: 1.05rem;
+        }
+        .start-title {
+          font-size: 3rem;
+          letter-spacing: 2px;
+        }
+
+        /* đưa timeline xuống dưới cùng */
+        #timeline {
+          left: 50%;
+          top: auto;
+          bottom: 30px;
+          transform: translateX(-50%);
+          flex-direction: row;
+          gap: 30px;
+        }
+        #timeline::before {
+          left: 0;
+          right: 0;
+          top: 4.5px;
+          bottom: auto;
+          width: 100%;
+          height: 1px;
+        }
+        .time-dot::after {
+          left: 50%;
+          top: -35px;
+          transform: translateX(-50%);
+          opacity: 0; /* ẩn text trên mobile khi chưa active */
+        }
+        .time-dot.active::after {
+          opacity: 1;
+          transform: translateX(-50%) scale(0.9);
+        }
+
+        .keyword::before {
+          max-width: 250px;
+          font-size: 0.85rem;
+        }
+      }
+
+      /* tắt con trỏ chuột custom trên thiết bị cảm ứng */
+      @media (hover: none) and (pointer: coarse) {
+        .cursor,
+        .cursor-dot {
+          display: none !important;
+        }
+        body {
+          cursor: auto;
+        }
+        .keyword:hover {
+          cursor: pointer;
+        }
+      }
+
       #sec1 .bg-image {
         background-image: url("images/chauai.jpg");
       }
@@ -296,10 +380,10 @@
     </div>
 
     <div id="timeline">
-      <div class="time-dot active" data-year="Thuở sơ khai"></div>
-      <div class="time-dot" data-year="Thế kỷ III"></div>
-      <div class="time-dot" data-year="Thế kỷ XV"></div>
-      <div class="time-dot" data-year="Thế kỷ XI - XIX"></div>
+      <div class="time-dot active" data-year="Sơ khai"></div>
+      <div class="time-dot" data-year="TK III"></div>
+      <div class="time-dot" data-year="TK XV"></div>
+      <div class="time-dot" data-year="TK XI-XIX"></div>
       <div class="time-dot" data-year="Hiện đại"></div>
     </div>
 
@@ -435,29 +519,38 @@
       const cursor = document.querySelector(".cursor");
       const cursorDot = document.querySelector(".cursor-dot");
       document.addEventListener("mousemove", (e) => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-        cursorDot.style.left = e.clientX + "px";
-        cursorDot.style.top = e.clientY + "px";
+        if (cursor && cursorDot) {
+          cursor.style.left = e.clientX + "px";
+          cursor.style.top = e.clientY + "px";
+          cursorDot.style.left = e.clientX + "px";
+          cursorDot.style.top = e.clientY + "px";
+        }
       });
       document.addEventListener(
         "mousedown",
-        () => (cursor.style.transform = "translate(-50%, -50%) scale(0.8)"),
+        () =>
+          cursor &&
+          (cursor.style.transform = "translate(-50%, -50%) scale(0.8)"),
       );
       document.addEventListener(
         "mouseup",
-        () => (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
+        () =>
+          cursor && (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
       );
       document
         .querySelectorAll(".keyword, .time-dot, #start-screen")
         .forEach((el) => {
           el.addEventListener(
             "mouseenter",
-            () => (cursor.style.transform = "translate(-50%, -50%) scale(1.5)"),
+            () =>
+              cursor &&
+              (cursor.style.transform = "translate(-50%, -50%) scale(1.5)"),
           );
           el.addEventListener(
             "mouseleave",
-            () => (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
+            () =>
+              cursor &&
+              (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
           );
         });
 
@@ -517,7 +610,11 @@
         .getElementById("start-screen")
         .addEventListener("click", function () {
           this.classList.add("hidden");
-          document.body.style.cursor = "none";
+          document.body.style.cursor = window.matchMedia(
+            "(hover: none) and (pointer: coarse)",
+          ).matches
+            ? "auto"
+            : "none";
           isStarted = true;
           tickSound
             .play()
@@ -532,7 +629,7 @@
           }
         });
 
-      const observerOptions = { root: null, rootMargin: "0px", threshold: 0.6 };
+      const observerOptions = { root: null, rootMargin: "0px", threshold: 0.5 };
       const dots = document.querySelectorAll(".time-dot");
 
       const observer = new IntersectionObserver((entries) => {
@@ -563,6 +660,7 @@
         .forEach((sec) => observer.observe(sec));
 
       window.addEventListener("scroll", () => {
+        if (window.innerWidth <= 768) return; // tắt parallax trên mobile cho nhẹ máy
         document.querySelectorAll("section").forEach((sec) => {
           const rect = sec.getBoundingClientRect();
           const bg = sec.querySelector(".bg-image");
