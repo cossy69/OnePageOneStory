@@ -1,505 +1,950 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ký Ức Xứ Thanh</title>
-<style>
-:root {
-  --gold: #d4af37;
-  --dark: #0a0a0a;
-  --text: #eaeaea;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html {
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-}
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--dark);
-  color: var(--text);
-  overflow-x: hidden;
-  cursor: none; 
-}
-
-.noise {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none; z-index: 9000; opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  animation: noiseAnim 0.2s infinite;
-  will-change: transform;
-}
-@keyframes noiseAnim {
-  0% { transform: translate(0, 0); }
-  10% { transform: translate(-5px, -5px); }
-  20% { transform: translate(-10px, 5px); }
-  30% { transform: translate(5px, -10px); }
-  40% { transform: translate(-5px, 15px); }
-  50% { transform: translate(-10px, 5px); }
-  60% { transform: translate(15px, 0); }
-  70% { transform: translate(0, 15px); }
-  80% { transform: translate(3px, 35px); }
-  90% { transform: translate(-10px, 10px); }
-  100% { transform: translate(0, 0); }
-}
-
-.progress-bar {
-  position: fixed; top: 0; left: 0; height: 3px;
-  background: var(--gold); z-index: 9998; width: 0%;
-  transition: width 0.1s ease-out;
-  box-shadow: 0 0 10px var(--gold);
-  will-change: width;
-}
-
-.mute-btn {
-  position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px;
-  border-radius: 50%; border: 1px solid rgba(212, 175, 55, 0.5);
-  background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(10px);
-  z-index: 9998; display: flex; align-items: center; justify-content: center;
-  color: var(--gold); transition: all 0.3s ease; opacity: 0; visibility: hidden;
-}
-.mute-btn.show { opacity: 1; visibility: visible; }
-.mute-btn:hover { background: rgba(212, 175, 55, 0.2); transform: scale(1.1); }
-.mute-btn svg { width: 20px; height: 20px; fill: currentColor; pointer-events: none; }
-
-.cursor {
-  width: 30px; height: 30px; border: 1px solid rgba(212, 175, 55, 0.5);
-  border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000;
-  transition: width 0.2s, height 0.2s;
-  transform: translate(-50%, -50%); mix-blend-mode: difference;
-  will-change: transform;
-}
-.cursor-dot {
-  width: 6px; height: 6px; background: var(--gold); border-radius: 50%;
-  position: fixed; pointer-events: none; z-index: 10000;
-  transform: translate(-50%, -50%); box-shadow: 0 0 10px var(--gold);
-  will-change: transform;
-}
-
-#start-screen {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: radial-gradient(circle at center, #1a1a1a 0%, var(--dark) 100%);
-  z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
-  padding: 0 20px; text-align: center;
-}
-#start-screen.hidden { opacity: 0; visibility: hidden; }
-.start-title {
-  color: var(--gold); font-size: 5rem; font-family: 'Times New Roman', serif;
-  margin-bottom: 30px; text-transform: uppercase; letter-spacing: 5px;
-  text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
-}
-.start-hint {
-  color: #888; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase;
-  animation: float 3s ease-in-out infinite;
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); opacity: 0.5; }
-  50% { transform: translateY(-10px); opacity: 1; }
-}
-
-#timeline {
-  position: fixed; left: 40px; top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; gap: 50px; z-index: 100;
-}
-#timeline::before {
-  content: ''; position: absolute; left: 4.5px; top: 0; bottom: 0;
-  width: 1px; background: rgba(255,255,255,0.1); z-index: -1;
-}
-.time-dot {
-  width: 10px; height: 10px; border-radius: 50%; background: #333;
-  transition: transform 0.2s ease, background 0.4s, box-shadow 0.4s; position: relative;
-  will-change: transform;
-}
-.time-dot::after {
-  content: attr(data-year); position: absolute; left: 30px; top: -5px;
-  color: #555; font-size: 0.9rem; letter-spacing: 1px;
-  transition: all 0.4s ease; white-space: nowrap; text-transform: uppercase; pointer-events: none;
-}
-.time-dot.active {
-  background: var(--gold); box-shadow: 0 0 15px var(--gold); transform: scale(1.5);
-}
-.time-dot.active::after {
-  color: var(--gold); transform: scale(0.8) translateX(10px); text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-}
-
-section {
-  height: 100vh; display: flex; align-items: center; justify-content: center;
-  padding: 0 10% 0 15%; position: relative; overflow: hidden; scroll-snap-align: center;
-  perspective: 1200px; 
-}
-.bg-image {
-  position: absolute; top: -5%; left: -5%; width: 110%; height: 110%;
-  background-position: center; background-size: cover; background-repeat: no-repeat;
-  z-index: 0; transform: scale(1);
-  transition: transform 12s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: transform;
-}
-.bg-image.zoomed {
-  transform: scale(1.08) !important;
-}
-.overlay {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.4) 100%); z-index: 1;
-}
-
-.content {
-  position: relative; z-index: 2; max-width: 750px; padding: 50px;
-  opacity: 0; transform: translateY(50px) scale(0.95);
-  transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.5s ease-out;
-  transform-style: preserve-3d; will-change: transform, opacity;
-}
-.content.visible { opacity: 1; transform: translateY(0) scale(1) rotateX(0) rotateY(0); }
-.content h2 {
-  color: var(--gold); font-size: 3rem; margin-bottom: 20px;
-  font-family: 'Times New Roman', serif; font-weight: 300; letter-spacing: 2px;
-  transform: translateZ(40px); 
-}
-.content p {
-  font-size: 1.15rem; line-height: 1.9; color: #ccc; text-align: justify;
-  transform: translateZ(25px); 
-}
-
-#sec1 .content {
-  background: linear-gradient(135deg, rgba(50, 35, 20, 0.85), rgba(20, 15, 10, 0.9));
-  border: 2px solid #a97142;
-  box-shadow: 0 0 30px rgba(169, 113, 66, 0.2), inset 0 0 20px rgba(169, 113, 66, 0.2);
-  border-radius: 12px;
-}
-#sec2 .content {
-  background: linear-gradient(45deg, rgba(40, 5, 5, 0.85), rgba(15, 5, 5, 0.95));
-  border: 1px solid #6b0000;
-  border-left: 6px solid #d32f2f; border-right: 6px solid #d32f2f;
-  border-radius: 0 45px 0 45px;
-  box-shadow: 0 15px 35px rgba(139, 0, 0, 0.3);
-}
-#sec2 .content h2 { color: #ff6b6b; }
-#sec3 .content {
-  background: rgba(10, 25, 15, 0.85);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
-  position: relative;
-}
-#sec3 .content::before, #sec3 .content::after {
-  content: ''; position: absolute; width: 50px; height: 50px; border: 3px solid var(--gold); pointer-events: none;
-}
-#sec3 .content::before { top: 15px; left: 15px; border-right: none; border-bottom: none; }
-#sec3 .content::after { bottom: 15px; right: 15px; border-left: none; border-top: none; }
-#sec4 .content {
-  background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%238b5a2b' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E"), rgba(35, 20, 15, 0.9);
-  border: 5px double #8b5a2b;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-}
-#sec5 .content {
-  background: rgba(10, 20, 35, 0.4);
-  backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  border-top: 4px solid #00ffff; border-bottom: 4px solid #00ffff;
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
-}
-#sec5 .content h2 { color: #00ffff; text-shadow: 0 0 15px rgba(0, 255, 255, 0.4); }
-#sec5 .keyword { color: #00ffff; border-bottom: 1px solid rgba(0, 255, 255, 0.4); }
-#sec5 .keyword:hover { color: #fff; text-shadow: 0 0 10px #00ffff; }
-
-.keyword {
-  color: #fff; font-weight: 500; text-shadow: 0 0 10px rgba(255,255,255,0.2);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.5); padding-bottom: 2px;
-  position: relative; transition: color 0.3s;
-}
-.keyword::before {
-  content: attr(data-tooltip); position: absolute; bottom: calc(100% + 15px); left: 50%;
-  transform: translateX(-50%) translateY(10px); width: max-content; max-width: 320px;
-  background: rgba(15, 15, 15, 0.95); color: #ddd; padding: 15px 20px;
-  border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2);
-  font-size: 0.9rem; line-height: 1.6; opacity: 0; visibility: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5); text-align: left; backdrop-filter: blur(5px);
-}
-.keyword:hover::before { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
-
-@media (max-width: 992px) {
-  section { padding: 0 5% 0 10%; } .content { padding: 40px; } .start-title { font-size: 4rem; }
-}
-@media (max-width: 768px) {
-  section { padding: 0 5%; } .overlay { background: rgba(10, 10, 10, 0.8); }
-  .content { padding: 30px 20px; } .content h2 { font-size: 2.2rem; text-align: center; } .content p { font-size: 1.05rem; }
-  .start-title { font-size: 3rem; letter-spacing: 2px; }
-  #timeline { left: 50%; top: auto; bottom: 30px; transform: translateX(-50%); flex-direction: row; gap: 30px; }
-  #timeline::before { left: 0; right: 0; top: 4.5px; bottom: auto; width: 100%; height: 1px; }
-  .time-dot::after { left: 50%; top: -35px; transform: translateX(-50%); opacity: 0; }
-  .time-dot.active::after { opacity: 1; transform: translateX(-50%) scale(0.9); }
-  .mute-btn { bottom: 100px; right: 20px; width: 40px; height: 40px; }
-}
-@media (hover: none) and (pointer: coarse) {
-  .cursor, .cursor-dot, .noise { display: none !important; }
-  body { cursor: auto; } .keyword:hover { cursor: pointer; }
-  .content { transform: none !important; transition: opacity 1s ease !important; }
-}
-
-#sec1 .bg-image { background-image: url('images/codai.jpg'); }
-#sec2 .bg-image { background-image: url('images/batrieu.jpg'); }
-#sec3 .bg-image { background-image: url('images/lamson.jpg'); }
-#sec4 .bg-image { background-image: url('images/nhanguyen.jpg'); }
-#sec5 .bg-image { background-image: url('images/songma.jpg'); }
-</style>
-</head>
-<body>
-
-<div class="noise"></div>
-<div class="progress-bar"></div>
-<div class="cursor"></div>
-<div class="cursor-dot"></div>
-
-<div class="mute-btn" id="mute-btn">
-  <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-</div>
-
-<div id="start-screen">
-  <div class="start-title">Ký Ức Xứ Thanh</div>
-  <div class="start-hint">Chạm để đánh thức dòng thời gian</div>
-</div>
-
-<div id="timeline">
-  <div class="time-dot active" data-year="Sơ khai"></div>
-  <div class="time-dot" data-year="TK III"></div>
-  <div class="time-dot" data-year="TK XV"></div>
-  <div class="time-dot" data-year="TK XI-XIX"></div>
-  <div class="time-dot" data-year="Hiện đại"></div>
-</div>
-
-<section id="sec1" data-index="0">
-  <div class="bg-image"></div>
-  <div class="overlay"></div>
-  <div class="content">
-    <h2>Nguồn Gốc Cửu Chân</h2>
-    <p>Thuở hồng hoang, vùng đất này được gọi là <span class="keyword" data-tooltip="Tên gọi cổ của vùng Thanh Hóa - Nghệ An thời kỳ đầu Bắc thuộc">Cửu Chân</span>, sau đó đổi thành <span class="keyword" data-tooltip="Tên gọi phổ biến thời nhà Tùy, nhà Đường">Châu Ái</span>. Nơi đây là cái nôi của nền <span class="keyword" data-tooltip="Nền văn hóa đồ đá mới rực rỡ cách đây khoảng 6000 năm">văn hóa Đa Bút</span> và <span class="keyword" data-tooltip="Nền văn hóa đồ đồng nổi tiếng với những chiếc trống đồng tinh xảo">văn hóa Đông Sơn</span> rực rỡ, với biểu tượng trống đồng mang đậm bản sắc người Việt cổ quần tụ ven bờ sông Mã.</p>
-  </div>
-</section>
-
-<section id="sec2" data-index="1">
-  <div class="bg-image"></div>
-  <div class="overlay"></div>
-  <div class="content">
-    <h2>Dấu Ấn Lịch Sử</h2>
-    <p>Trải qua bao thăng trầm, vùng đất Ái Châu đã chứng kiến những cuộc khởi nghĩa oanh liệt. Nổi bật nhất là dấu chân của <span class="keyword" data-tooltip="Nữ anh hùng dân tộc Triệu Thị Trinh lãnh đạo khởi nghĩa chống quân Ngô năm 248">Bà Triệu</span> trên đỉnh <span class="keyword" data-tooltip="Ngọn núi linh thiêng tại Triệu Sơn, nơi Bà Triệu dấy binh khởi nghĩa">núi Nưa</span>, vang vọng lời thề "cưỡi cơn gió mạnh, đạp luồng sóng dữ, chém cá kình ở biển Đông" chứ nhất quyết không chịu cúi đầu làm tì thiếp cho người.</p>
-  </div>
-</section>
-
-<section id="sec3" data-index="2">
-  <div class="bg-image"></div>
-  <div class="overlay"></div>
-  <div class="content">
-    <h2>Hào Khí Lam Sơn</h2>
-    <p>Đến thế kỷ 15, từ vùng núi rừng <span class="keyword" data-tooltip="Căn cứ địa của cuộc khởi nghĩa Lam Sơn thuộc huyện Thọ Xuân ngày nay">Lam Sơn</span>, một trang sử vàng lại được viết lên. Nơi đây <span class="keyword" data-tooltip="Lời thề anh em kết nghĩa của 19 hào kiệt phò tá Lê Lợi">hội thề Lũng Nhai</span> đã kết nối những anh hùng hào kiệt, nuôi dưỡng ý chí quật cường của Lê Lợi và Nguyễn Trãi, ròng rã mười năm nếm mật nằm gai để đánh đuổi quân Minh, lập nên vương triều nhà Lê huy hoàng.</p>
-  </div>
-</section>
-
-<section id="sec4" data-index="3">
-  <div class="bg-image"></div>
-  <div class="overlay"></div>
-  <div class="content">
-    <h2>Danh Xưng Thanh Hóa</h2>
-    <p>Danh xưng "Thanh Hóa" chính thức xuất hiện dưới thời vua <span class="keyword" data-tooltip="Vị vua triều Lý, người đã đổi tên Ái Châu thành Thanh Hóa năm 1029">Lý Thái Tông</span>. Trải dài đến triều Nguyễn, mảnh đất này luôn đóng vai trò trọng yếu, được xem là <span class="keyword" data-tooltip="Vùng đất cội nguồn phát tích của 3 triều vua (Tiền Lê, Hậu Lê, Nguyễn) và 2 triều chúa (Trịnh, Nguyễn)">đất căn bản</span>, một phên dậu vững chắc bảo vệ sơn hà qua nhiều thời kỳ binh lửa.</p>
-  </div>
-</section>
-
-<section id="sec5" data-index="4">
-  <div class="bg-image"></div>
-  <div class="overlay"></div>
-  <div class="content">
-    <h2>Vươn Mình Hiện Đại</h2>
-    <p>Ngày nay, xứ Thanh đang chuyển mình mạnh mẽ. Người dân nơi đây vừa gìn giữ nét đẹp rêu phong của <span class="keyword" data-tooltip="Di sản văn hóa thế giới được UNESCO công nhận, xây dựng năm 1397 bằng đá xanh nguyên khối">Thành Nhà Hồ</span>, vừa tự tin vươn lên xây dựng một trung tâm công nghiệp <span class="keyword" data-tooltip="Khu kinh tế trọng điểm ven biển với hạt nhân là tổ hợp lọc hóa dầu">Nghi Sơn</span> sầm uất và những thành phố du lịch biển ngập tràn sức sống.</p>
-  </div>
-</section>
-
-<script>
-const cursor = document.querySelector('.cursor');
-const cursorDot = document.querySelector('.cursor-dot');
-const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-
-let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-let isMoving = false;
-let currentActiveIndex = 0;
-
-document.addEventListener('mousemove', e => {
-  if (isTouchDevice) return;
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  
-  if (!isMoving) {
-    window.requestAnimationFrame(() => {
-      if (cursor && cursorDot) {
-        cursor.style.transform = `translate(calc(-50% + ${mouseX}px), calc(-50% + ${mouseY}px))`;
-        cursorDot.style.transform = `translate(calc(-50% + ${mouseX}px), calc(-50% + ${mouseY}px))`;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ký Ức Xứ Thanh</title>
+    <style>
+      :root {
+        --gold: #d4af37;
+        --dark: #0a0a0a;
+        --text: #eaeaea;
       }
-      
-      const activeSection = document.querySelector(`section[data-index="${currentActiveIndex}"]`);
-      if (activeSection) {
-        const activeContent = activeSection.querySelector('.content');
-        if (activeContent && activeContent.classList.contains('visible')) {
-          const xAxis = (window.innerWidth / 2 - mouseX) / 60; 
-          const yAxis = (window.innerHeight / 2 - mouseY) / 60;
-          activeContent.style.transform = `perspective(1000px) rotateY(${-xAxis}deg) rotateX(${yAxis}deg) scale3d(1.02, 1.02, 1.02)`;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-snap-type: y mandatory;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--dark);
+        color: var(--text);
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      .noise {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 9000;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        animation: noiseAnim 0.2s infinite;
+        will-change: transform;
+      }
+      @keyframes noiseAnim {
+        0% {
+          transform: translate(0, 0);
+        }
+        10% {
+          transform: translate(-5px, -5px);
+        }
+        20% {
+          transform: translate(-10px, 5px);
+        }
+        30% {
+          transform: translate(5px, -10px);
+        }
+        40% {
+          transform: translate(-5px, 15px);
+        }
+        50% {
+          transform: translate(-10px, 5px);
+        }
+        60% {
+          transform: translate(15px, 0);
+        }
+        70% {
+          transform: translate(0, 15px);
+        }
+        80% {
+          transform: translate(3px, 35px);
+        }
+        90% {
+          transform: translate(-10px, 10px);
+        }
+        100% {
+          transform: translate(0, 0);
         }
       }
-      
-      isMoving = false;
-    });
-    isMoving = true;
-  }
-});
 
-document.addEventListener('mouseleave', () => {
-  document.querySelectorAll('section .content').forEach(content => {
-    content.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
-  });
-});
+      .progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: var(--gold);
+        z-index: 9998;
+        width: 0%;
+        transition: width 0.1s ease-out;
+        box-shadow: 0 0 10px var(--gold);
+        will-change: width;
+      }
 
-document.querySelectorAll('.time-dot').forEach(dot => {
-  dot.addEventListener('mousemove', e => {
-    if(isTouchDevice) return;
-    window.requestAnimationFrame(() => {
-      const rect = dot.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      dot.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px) scale(1.5)`;
-    });
-  });
-  dot.addEventListener('mouseleave', () => {
-    dot.style.transform = '';
-  });
-});
+      .mute-btn {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 1px solid rgba(212, 175, 55, 0.5);
+        background: rgba(10, 10, 10, 0.6);
+        backdrop-filter: blur(10px);
+        z-index: 9998;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--gold);
+        transition: all 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
+      }
+      .mute-btn.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      .mute-btn:hover {
+        background: rgba(212, 175, 55, 0.2);
+        transform: scale(1.1);
+      }
+      .mute-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+        pointer-events: none;
+      }
 
-let isScrolling = false;
-window.addEventListener('scroll', () => {
-  if (!isScrolling) {
-    window.requestAnimationFrame(() => {
-      const scrollPx = document.documentElement.scrollTop;
-      const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = `${scrollPx / winHeightPx * 100}%`;
-      document.querySelector('.progress-bar').style.width = scrolled;
-      
-      if (!isTouchDevice) {
-        document.querySelectorAll('section').forEach(sec => {
-          const rect = sec.getBoundingClientRect();
-          const bg = sec.querySelector('.bg-image');
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
-            let scrollOffset = window.pageYOffset - sec.offsetTop;
-            bg.style.transform = `translateY(${scrollOffset * 0.25}px)`; 
+      .cursor {
+        width: 30px;
+        height: 30px;
+        border: 1px solid rgba(212, 175, 55, 0.5);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 10000;
+        transition:
+          width 0.2s,
+          height 0.2s;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: difference;
+        will-change: transform;
+      }
+      .cursor-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--gold);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 10000;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 10px var(--gold);
+        will-change: transform;
+      }
+
+      #start-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle at center,
+          #1a1a1a 0%,
+          var(--dark) 100%
+        );
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition:
+          opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+          visibility 1.2s;
+        padding: 0 20px;
+        text-align: center;
+      }
+      #start-screen.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .start-title {
+        color: var(--gold);
+        font-size: 5rem;
+        font-family: "Times New Roman", serif;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+      }
+      .start-hint {
+        color: #888;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translateY(-10px);
+          opacity: 1;
+        }
+      }
+
+      #timeline {
+        position: fixed;
+        left: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        z-index: 100;
+      }
+      #timeline::before {
+        content: "";
+        position: absolute;
+        left: 4.5px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: -1;
+      }
+      .time-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #333;
+        transition:
+          transform 0.2s ease,
+          background 0.4s,
+          box-shadow 0.4s;
+        position: relative;
+        will-change: transform;
+      }
+      .time-dot::after {
+        content: attr(data-year);
+        position: absolute;
+        left: 30px;
+        top: -5px;
+        color: #555;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        transition: all 0.4s ease;
+        white-space: nowrap;
+        text-transform: uppercase;
+        pointer-events: none;
+      }
+      .time-dot.active {
+        background: var(--gold);
+        box-shadow: 0 0 15px var(--gold);
+        transform: scale(1.5);
+      }
+      .time-dot.active::after {
+        color: var(--gold);
+        transform: scale(0.8) translateX(10px);
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+      }
+
+      section {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10% 0 15%;
+        position: relative;
+        overflow: hidden;
+        scroll-snap-align: center;
+        perspective: 1200px;
+      }
+      .bg-image {
+        position: absolute;
+        top: -5%;
+        left: -5%;
+        width: 110%;
+        height: 110%;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: 0;
+        transform: scale(1);
+        transition: transform 12s cubic-bezier(0.2, 0.8, 0.2, 1);
+        will-change: transform;
+      }
+      .bg-image.zoomed {
+        transform: scale(1.08) !important;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          rgba(10, 10, 10, 0.95) 0%,
+          rgba(10, 10, 10, 0.6) 50%,
+          rgba(10, 10, 10, 0.4) 100%
+        );
+        z-index: 1;
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+        max-width: 750px;
+        padding: 50px;
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+        transition:
+          opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1),
+          transform 0.5s ease-out;
+        transform-style: preserve-3d;
+        will-change: transform, opacity;
+      }
+      .content.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0) rotateY(0);
+      }
+      .content h2 {
+        color: var(--gold);
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-family: "Times New Roman", serif;
+        font-weight: 300;
+        letter-spacing: 2px;
+        transform: translateZ(40px);
+      }
+      .content p {
+        font-size: 1.15rem;
+        line-height: 1.9;
+        color: #ccc;
+        text-align: justify;
+        transform: translateZ(25px);
+      }
+
+      #sec1 .content {
+        background: linear-gradient(
+          135deg,
+          rgba(50, 35, 20, 0.85),
+          rgba(20, 15, 10, 0.9)
+        );
+        border: 2px solid #a97142;
+        box-shadow:
+          0 0 30px rgba(169, 113, 66, 0.2),
+          inset 0 0 20px rgba(169, 113, 66, 0.2);
+        border-radius: 12px;
+      }
+      #sec2 .content {
+        background: linear-gradient(
+          45deg,
+          rgba(40, 5, 5, 0.85),
+          rgba(15, 5, 5, 0.95)
+        );
+        border: 1px solid #6b0000;
+        border-left: 6px solid #d32f2f;
+        border-right: 6px solid #d32f2f;
+        border-radius: 0 45px 0 45px;
+        box-shadow: 0 15px 35px rgba(139, 0, 0, 0.3);
+      }
+      #sec2 .content h2 {
+        color: #ff6b6b;
+      }
+      #sec3 .content {
+        background: rgba(10, 25, 15, 0.85);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+        position: relative;
+      }
+      #sec3 .content::before,
+      #sec3 .content::after {
+        content: "";
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border: 3px solid var(--gold);
+        pointer-events: none;
+      }
+      #sec3 .content::before {
+        top: 15px;
+        left: 15px;
+        border-right: none;
+        border-bottom: none;
+      }
+      #sec3 .content::after {
+        bottom: 15px;
+        right: 15px;
+        border-left: none;
+        border-top: none;
+      }
+      #sec4 .content {
+        background:
+          url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%238b5a2b' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E"),
+          rgba(35, 20, 15, 0.9);
+        border: 5px double #8b5a2b;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      }
+      #sec5 .content {
+        background: rgba(10, 20, 35, 0.4);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(0, 255, 255, 0.2);
+        border-top: 4px solid #00ffff;
+        border-bottom: 4px solid #00ffff;
+        border-radius: 16px;
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+      }
+      #sec5 .content h2 {
+        color: #00ffff;
+        text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+      }
+      #sec5 .keyword {
+        color: #00ffff;
+        border-bottom: 1px solid rgba(0, 255, 255, 0.4);
+      }
+      #sec5 .keyword:hover {
+        color: #fff;
+        text-shadow: 0 0 10px #00ffff;
+      }
+
+      .keyword {
+        color: #fff;
+        font-weight: 500;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+        padding-bottom: 2px;
+        position: relative;
+        transition: color 0.3s;
+      }
+      .keyword::before {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 15px);
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        width: max-content;
+        max-width: 320px;
+        background: rgba(15, 15, 15, 0.95);
+        color: #ddd;
+        padding: 15px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 10;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        text-align: left;
+        backdrop-filter: blur(5px);
+      }
+      .keyword:hover::before {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      @media (max-width: 992px) {
+        section {
+          padding: 0 5% 0 10%;
+        }
+        .content {
+          padding: 40px;
+        }
+        .start-title {
+          font-size: 4rem;
+        }
+      }
+      @media (max-width: 768px) {
+        section {
+          padding: 0 5%;
+        }
+        .overlay {
+          background: rgba(10, 10, 10, 0.8);
+        }
+        .content {
+          padding: 30px 20px;
+        }
+        .content h2 {
+          font-size: 2.2rem;
+          text-align: center;
+        }
+        .content p {
+          font-size: 1.05rem;
+        }
+        .start-title {
+          font-size: 3rem;
+          letter-spacing: 2px;
+        }
+        #timeline {
+          left: 50%;
+          top: auto;
+          bottom: 30px;
+          transform: translateX(-50%);
+          flex-direction: row;
+          gap: 30px;
+        }
+        #timeline::before {
+          left: 0;
+          right: 0;
+          top: 4.5px;
+          bottom: auto;
+          width: 100%;
+          height: 1px;
+        }
+        .time-dot::after {
+          left: 50%;
+          top: -35px;
+          transform: translateX(-50%);
+          opacity: 0;
+        }
+        .time-dot.active::after {
+          opacity: 1;
+          transform: translateX(-50%) scale(0.9);
+        }
+        .mute-btn {
+          bottom: 100px;
+          right: 20px;
+          width: 40px;
+          height: 40px;
+        }
+      }
+      @media (hover: none) and (pointer: coarse) {
+        .cursor,
+        .cursor-dot,
+        .noise {
+          display: none !important;
+        }
+        body {
+          cursor: auto;
+        }
+        .keyword:hover {
+          cursor: pointer;
+        }
+        .content {
+          transform: none !important;
+          transition: opacity 1s ease !important;
+        }
+      }
+
+      #sec1 .bg-image {
+        background-image: url("images/codai.jpg");
+      }
+      #sec2 .bg-image {
+        background-image: url("images/batrieu.jpg");
+      }
+      #sec3 .bg-image {
+        background-image: url("images/lamson.jpg");
+      }
+      #sec4 .bg-image {
+        background-image: url("images/nhanguyen.jpg");
+      }
+      #sec5 .bg-image {
+        background-image: url("images/songma.jpg");
+      }
+    </style>
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="progress-bar"></div>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <div class="mute-btn" id="mute-btn">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
+        />
+      </svg>
+    </div>
+
+    <div id="start-screen">
+      <div class="start-title">Ký Ức Xứ Thanh</div>
+      <div class="start-hint">Chạm để đánh thức dòng thời gian</div>
+    </div>
+
+    <div id="timeline">
+      <div class="time-dot active" data-year="Sơ khai"></div>
+      <div class="time-dot" data-year="TK III"></div>
+      <div class="time-dot" data-year="TK XV"></div>
+      <div class="time-dot" data-year="TK XI-XIX"></div>
+      <div class="time-dot" data-year="Hiện đại"></div>
+    </div>
+
+    <section id="sec1" data-index="0">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Nguồn Gốc Cửu Chân</h2>
+        <p>
+          Thuở hồng hoang, vùng đất này được gọi là
+          <span
+            class="keyword"
+            data-tooltip="Tên gọi cổ của vùng Thanh Hóa - Nghệ An thời kỳ đầu Bắc thuộc"
+            >Cửu Chân</span
+          >, sau đó đổi thành
+          <span
+            class="keyword"
+            data-tooltip="Tên gọi phổ biến thời nhà Tùy, nhà Đường"
+            >Châu Ái</span
+          >. Nơi đây là cái nôi của nền
+          <span
+            class="keyword"
+            data-tooltip="Nền văn hóa đồ đá mới rực rỡ cách đây khoảng 6000 năm"
+            >văn hóa Đa Bút</span
+          >
+          và
+          <span
+            class="keyword"
+            data-tooltip="Nền văn hóa đồ đồng nổi tiếng với những chiếc trống đồng tinh xảo"
+            >văn hóa Đông Sơn</span
+          >
+          rực rỡ, với biểu tượng trống đồng mang đậm bản sắc người Việt cổ quần
+          tụ ven bờ sông Mã.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec2" data-index="1">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Dấu Ấn Lịch Sử</h2>
+        <p>
+          Trải qua bao thăng trầm, vùng đất Ái Châu đã chứng kiến những cuộc
+          khởi nghĩa oanh liệt. Nổi bật nhất là dấu chân của
+          <span
+            class="keyword"
+            data-tooltip="Nữ anh hùng dân tộc Triệu Thị Trinh lãnh đạo khởi nghĩa chống quân Ngô năm 248"
+            >Bà Triệu</span
+          >
+          trên đỉnh
+          <span
+            class="keyword"
+            data-tooltip="Ngọn núi linh thiêng tại Triệu Sơn, nơi Bà Triệu dấy binh khởi nghĩa"
+            >núi Nưa</span
+          >, vang vọng lời thề "cưỡi cơn gió mạnh, đạp luồng sóng dữ, chém cá
+          kình ở biển Đông" chứ nhất quyết không chịu cúi đầu làm tì thiếp cho
+          người.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec3" data-index="2">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Hào Khí Lam Sơn</h2>
+        <p>
+          Đến thế kỷ 15, từ vùng núi rừng
+          <span
+            class="keyword"
+            data-tooltip="Căn cứ địa của cuộc khởi nghĩa Lam Sơn thuộc huyện Thọ Xuân ngày nay"
+            >Lam Sơn</span
+          >, một trang sử vàng lại được viết lên. Nơi đây
+          <span
+            class="keyword"
+            data-tooltip="Lời thề anh em kết nghĩa của 19 hào kiệt phò tá Lê Lợi"
+            >hội thề Lũng Nhai</span
+          >
+          đã kết nối những anh hùng hào kiệt, nuôi dưỡng ý chí quật cường của Lê
+          Lợi và Nguyễn Trãi, ròng rã mười năm nếm mật nằm gai để đánh đuổi quân
+          Minh, lập nên vương triều nhà Lê huy hoàng.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec4" data-index="3">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Danh Xưng Thanh Hóa</h2>
+        <p>
+          Danh xưng "Thanh Hóa" chính thức xuất hiện dưới thời vua
+          <span
+            class="keyword"
+            data-tooltip="Vị vua triều Lý, người đã đổi tên Ái Châu thành Thanh Hóa năm 1029"
+            >Lý Thái Tông</span
+          >. Trải dài đến triều Nguyễn, mảnh đất này luôn đóng vai trò trọng
+          yếu, được xem là
+          <span
+            class="keyword"
+            data-tooltip="Vùng đất cội nguồn phát tích của 3 triều vua (Tiền Lê, Hậu Lê, Nguyễn) và 2 triều chúa (Trịnh, Nguyễn)"
+            >đất căn bản</span
+          >, một phên dậu vững chắc bảo vệ sơn hà qua nhiều thời kỳ binh lửa.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec5" data-index="4">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Vươn Mình Hiện Đại</h2>
+        <p>
+          Ngày nay, xứ Thanh đang chuyển mình mạnh mẽ. Người dân nơi đây vừa gìn
+          giữ nét đẹp rêu phong của
+          <span
+            class="keyword"
+            data-tooltip="Di sản văn hóa thế giới được UNESCO công nhận, xây dựng năm 1397 bằng đá xanh nguyên khối"
+            >Thành Nhà Hồ</span
+          >, vừa tự tin vươn lên xây dựng một trung tâm công nghiệp
+          <span
+            class="keyword"
+            data-tooltip="Khu kinh tế trọng điểm ven biển với hạt nhân là tổ hợp lọc hóa dầu"
+            >Nghi Sơn</span
+          >
+          sầm uất và những thành phố du lịch biển ngập tràn sức sống.
+        </p>
+      </div>
+    </section>
+
+    <script>
+      const cursor = document.querySelector(".cursor");
+      const cursorDot = document.querySelector(".cursor-dot");
+      const isTouchDevice = window.matchMedia(
+        "(hover: none) and (pointer: coarse)",
+      ).matches;
+
+      let mouseX = window.innerWidth / 2,
+        mouseY = window.innerHeight / 2;
+      let isMoving = false;
+      let currentActiveIndex = 0;
+
+      document.addEventListener("mousemove", (e) => {
+        if (isTouchDevice) return;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        if (!isMoving) {
+          window.requestAnimationFrame(() => {
+            if (cursor && cursorDot) {
+              cursor.style.transform = `translate(calc(-50% + ${mouseX}px), calc(-50% + ${mouseY}px))`;
+              cursorDot.style.transform = `translate(calc(-50% + ${mouseX}px), calc(-50% + ${mouseY}px))`;
+            }
+
+            const activeSection = document.querySelector(
+              `section[data-index="${currentActiveIndex}"]`,
+            );
+            if (activeSection) {
+              const activeContent = activeSection.querySelector(".content");
+              if (
+                activeContent &&
+                activeContent.classList.contains("visible")
+              ) {
+                const xAxis = (window.innerWidth / 2 - mouseX) / 60;
+                const yAxis = (window.innerHeight / 2 - mouseY) / 60;
+                activeContent.style.transform = `perspective(1000px) rotateY(${-xAxis}deg) rotateX(${yAxis}deg) scale3d(1.02, 1.02, 1.02)`;
+              }
+            }
+            isMoving = false;
+          });
+          isMoving = true;
+        }
+      });
+
+      document.addEventListener("mouseleave", () => {
+        document.querySelectorAll("section .content").forEach((content) => {
+          content.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+        });
+      });
+
+      document.querySelectorAll(".time-dot").forEach((dot) => {
+        dot.addEventListener("mousemove", (e) => {
+          if (isTouchDevice) return;
+          window.requestAnimationFrame(() => {
+            const rect = dot.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            dot.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px) scale(1.5)`;
+          });
+        });
+        dot.addEventListener("mouseleave", () => {
+          dot.style.transform = "";
+        });
+      });
+
+      let isScrolling = false;
+      window.addEventListener("scroll", () => {
+        if (!isScrolling) {
+          window.requestAnimationFrame(() => {
+            const scrollPx = document.documentElement.scrollTop;
+            const winHeightPx =
+              document.documentElement.scrollHeight -
+              document.documentElement.clientHeight;
+            const scrolled = `${(scrollPx / winHeightPx) * 100}%`;
+            document.querySelector(".progress-bar").style.width = scrolled;
+
+            if (!isTouchDevice) {
+              document.querySelectorAll("section").forEach((sec) => {
+                const rect = sec.getBoundingClientRect();
+                const bg = sec.querySelector(".bg-image");
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                  let scrollOffset = window.pageYOffset - sec.offsetTop;
+                  bg.style.transform = `translateY(${scrollOffset * 0.25}px)`;
+                }
+              });
+            }
+            isScrolling = false;
+          });
+          isScrolling = true;
+        }
+      });
+
+      const tickSound = new Audio(
+        "data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU",
+      );
+      tickSound.volume = 0.4;
+
+      const bgmList = [
+        new Audio("audio/codai.mp3"),
+        new Audio("audio/batrieu.mp3"),
+        new Audio("audio/lamson.mp3"),
+        new Audio("audio/nhanguyen.mp3"),
+        new Audio("audio/songma.mp3"),
+      ];
+
+      bgmList.forEach((a) => {
+        if (a) {
+          a.loop = true;
+          a.volume = 0;
+        }
+      });
+
+      let isStarted = false;
+      let isMuted = false;
+
+      const muteBtn = document.getElementById("mute-btn");
+      muteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        isMuted = !isMuted;
+
+        if (isMuted) {
+          muteBtn.innerHTML =
+            '<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
+          bgmList.forEach((a) => {
+            if (a) a.muted = true;
+          });
+          tickSound.muted = true;
+        } else {
+          muteBtn.innerHTML =
+            '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
+          bgmList.forEach((a) => {
+            if (a) a.muted = false;
+          });
+          tickSound.muted = false;
+        }
+      });
+
+      let audioMasterInterval;
+      function playBgm(targetAudio) {
+        clearInterval(audioMasterInterval);
+        audioMasterInterval = setInterval(() => {
+          let allSettled = true;
+          bgmList.forEach((audio) => {
+            if (!audio) return;
+            if (audio === targetAudio) {
+              if (audio.paused) {
+                audio.muted = isMuted;
+                audio.play().catch((e) => {});
+              }
+              if (audio.volume < 0.95) {
+                audio.volume += 0.05;
+                allSettled = false;
+              } else {
+                audio.volume = 1;
+              }
+            } else {
+              if (audio.volume > 0.05) {
+                audio.volume -= 0.05;
+                allSettled = false;
+              } else {
+                audio.volume = 0;
+                if (!audio.paused) {
+                  audio.pause();
+                  audio.currentTime = 0;
+                }
+              }
+            }
+          });
+          if (allSettled) clearInterval(audioMasterInterval);
+        }, 50);
+      }
+
+      document
+        .getElementById("start-screen")
+        .addEventListener("click", function () {
+          this.classList.add("hidden");
+          document.body.style.cursor = isTouchDevice ? "auto" : "none";
+          muteBtn.classList.add("show");
+          isStarted = true;
+          tickSound
+            .play()
+            .then(() => {
+              tickSound.pause();
+              tickSound.currentTime = 0;
+            })
+            .catch((e) => {});
+
+          if (bgmList[currentActiveIndex]) {
+            playBgm(bgmList[currentActiveIndex]);
+          }
+          document.querySelector("#sec1 .bg-image").classList.add("zoomed");
+        });
+
+      const observerOptions = { root: null, rootMargin: "0px", threshold: 0.5 };
+      const dots = document.querySelectorAll(".time-dot");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const content = entry.target.querySelector(".content");
+            const bgImage = entry.target.querySelector(".bg-image");
+
+            content.classList.add("visible");
+            bgImage.classList.add("zoomed");
+
+            const index = parseInt(entry.target.getAttribute("data-index"));
+            if (index !== currentActiveIndex) {
+              document.querySelectorAll("section .content").forEach((c) => {
+                c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+              });
+
+              dots.forEach((dot) => dot.classList.remove("active"));
+              dots[index].classList.add("active");
+
+              if (isStarted) {
+                tickSound.currentTime = 0;
+                tickSound.play().catch((e) => {});
+                playBgm(bgmList[index]);
+              }
+              currentActiveIndex = index;
+            }
+          } else {
+            entry.target.querySelector(".bg-image").classList.remove("zoomed");
           }
         });
-      }
-      isScrolling = false;
-    });
-    isScrolling = true;
-  }
-});
+      }, observerOptions);
 
-const tickSound = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'); 
-tickSound.volume = 0.4;
-
-const bgmList = [
-  new Audio('audio/codai.mp3'),
-  new Audio('audio/batrieu.mp3'),
-  new Audio('audio/lamson.mp3'),
-  new Audio('audio/nhanguyen.mp3'),
-  new Audio('audio/songma.mp3')
-];
-bgmList.forEach(a => { if(a) { a.loop = true; a.volume = 0; } });
-
-let currentBgm = null;
-let isStarted = false;
-let isMuted = false;
-
-const muteBtn = document.getElementById('mute-btn');
-muteBtn.addEventListener('click', () => {
-  isMuted = !isMuted;
-  if(isMuted) {
-    muteBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
-    if(currentBgm) currentBgm.muted = true;
-    tickSound.muted = true;
-  } else {
-    muteBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
-    if(currentBgm) currentBgm.muted = false;
-    tickSound.muted = false;
-  }
-});
-
-let fadeOutInterval, fadeInInterval;
-function fadeAudio(audioOut, audioIn) {
-  clearInterval(fadeOutInterval);
-  clearInterval(fadeInInterval);
-  
-  if(audioOut) {
-    let vol = audioOut.volume;
-    fadeOutInterval = setInterval(() => {
-      if (vol > 0.05) { vol -= 0.05; audioOut.volume = vol; } 
-      else { clearInterval(fadeOutInterval); audioOut.pause(); audioOut.currentTime = 0; }
-    }, 50);
-  }
-  if(audioIn) {
-    audioIn.muted = isMuted;
-    audioIn.play().catch(e=>{});
-    let volIn = 0;
-    fadeInInterval = setInterval(() => {
-      if (volIn < 0.95) { volIn += 0.05; audioIn.volume = volIn; } 
-      else { clearInterval(fadeInInterval); audioIn.volume = 1; }
-    }, 50);
-  }
-}
-
-document.getElementById('start-screen').addEventListener('click', function() {
-  this.classList.add('hidden');
-  document.body.style.cursor = isTouchDevice ? 'auto' : 'none'; 
-  muteBtn.classList.add('show');
-  isStarted = true;
-  tickSound.play().then(() => { tickSound.pause(); tickSound.currentTime = 0; }).catch(e => {});
-  if (bgmList[currentActiveIndex]) {
-    currentBgm = bgmList[currentActiveIndex];
-    fadeAudio(null, currentBgm);
-  }
-  document.querySelector('#sec1 .bg-image').classList.add('zoomed');
-});
-
-const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
-const dots = document.querySelectorAll('.time-dot');
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const content = entry.target.querySelector('.content');
-      const bgImage = entry.target.querySelector('.bg-image');
-      
-      content.classList.add('visible');
-      bgImage.classList.add('zoomed');
-      
-      const index = parseInt(entry.target.getAttribute('data-index'));
-      if (index !== currentActiveIndex) {
-        
-        // reset góc nghiêng của tất cả thẻ cũ
-        document.querySelectorAll('section .content').forEach(c => {
-          c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
-        });
-        
-        dots.forEach(dot => dot.classList.remove('active'));
-        dots[index].classList.add('active');
-        
-        if (isStarted) {
-          tickSound.currentTime = 0; tickSound.play().catch(e => {});
-          fadeAudio(currentBgm, bgmList[index]);
-          currentBgm = bgmList[index];
-        }
-        currentActiveIndex = index;
-      }
-    } else {
-      entry.target.querySelector('.bg-image').classList.remove('zoomed');
-    }
-  });
-}, observerOptions);
-
-document.querySelectorAll('section').forEach(sec => observer.observe(sec));
-</script>
-</body>
+      document
+        .querySelectorAll("section")
+        .forEach((sec) => observer.observe(sec));
+    </script>
+  </body>
 </html>
