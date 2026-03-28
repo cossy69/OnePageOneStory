@@ -27,6 +27,7 @@
         cursor: none;
       }
 
+<<<<<<< HEAD
       .noise {
         position: fixed;
         top: 0;
@@ -123,6 +124,8 @@
         pointer-events: none;
       }
 
+=======
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       .cursor {
         width: 30px;
         height: 30px;
@@ -132,11 +135,18 @@
         pointer-events: none;
         z-index: 10000;
         transition:
+<<<<<<< HEAD
           width 0.2s,
           height 0.2s;
         transform: translate(-50%, -50%);
         mix-blend-mode: difference;
         will-change: transform;
+=======
+          transform 0.15s ease-out,
+          width 0.2s,
+          height 0.2s;
+        transform: translate(-50%, -50%);
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .cursor-dot {
         width: 6px;
@@ -148,7 +158,10 @@
         z-index: 10000;
         transform: translate(-50%, -50%);
         box-shadow: 0 0 10px var(--gold);
+<<<<<<< HEAD
         will-change: transform;
+=======
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
 
       #start-screen {
@@ -230,10 +243,14 @@
         height: 10px;
         border-radius: 50%;
         background: #333;
+<<<<<<< HEAD
         transition:
           transform 0.2s ease,
           background 0.4s,
           box-shadow 0.4s;
+=======
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
         position: relative;
         will-change: transform;
       }
@@ -248,7 +265,10 @@
         transition: all 0.4s ease;
         white-space: nowrap;
         text-transform: uppercase;
+<<<<<<< HEAD
         pointer-events: none;
+=======
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .time-dot.active {
         background: var(--gold);
@@ -270,7 +290,10 @@
         position: relative;
         overflow: hidden;
         scroll-snap-align: center;
+<<<<<<< HEAD
         perspective: 1200px;
+=======
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .bg-image {
         position: absolute;
@@ -282,12 +305,16 @@
         background-size: cover;
         background-repeat: no-repeat;
         z-index: 0;
+<<<<<<< HEAD
         transform: scale(1);
         transition: transform 12s cubic-bezier(0.2, 0.8, 0.2, 1);
         will-change: transform;
       }
       .bg-image.zoomed {
         transform: scale(1.08) !important;
+=======
+        transition: transform 0.5s ease-out;
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .overlay {
         position: absolute;
@@ -308,6 +335,7 @@
         position: relative;
         z-index: 2;
         max-width: 750px;
+<<<<<<< HEAD
         padding: 50px;
         opacity: 0;
         transform: translateY(50px) scale(0.95);
@@ -320,6 +348,22 @@
       .content.visible {
         opacity: 1;
         transform: translateY(0) scale(1) rotateX(0) rotateY(0);
+=======
+        background: rgba(20, 20, 20, 0.2);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 50px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+        transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .content.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .content h2 {
         color: var(--gold);
@@ -328,7 +372,10 @@
         font-family: "Times New Roman", serif;
         font-weight: 300;
         letter-spacing: 2px;
+<<<<<<< HEAD
         transform: translateZ(40px);
+=======
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .content p {
         font-size: 1.15rem;
@@ -430,6 +477,12 @@
         padding-bottom: 2px;
         position: relative;
         transition: color 0.3s;
+<<<<<<< HEAD
+=======
+      }
+      .keyword:hover {
+        color: var(--gold);
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .keyword::before {
         content: attr(data-tooltip);
@@ -460,6 +513,10 @@
         transform: translateX(-50%) translateY(0);
       }
 
+<<<<<<< HEAD
+=======
+      /* responsive cho màn hình nhỏ */
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       @media (max-width: 992px) {
         section {
           padding: 0 5% 0 10%;
@@ -470,6 +527,7 @@
         .start-title {
           font-size: 4rem;
         }
+<<<<<<< HEAD
       }
       @media (max-width: 768px) {
         section {
@@ -546,6 +604,83 @@
       #sec1 .bg-image {
         background-image: url("images/codai.jpg");
       }
+=======
+      }
+
+      @media (max-width: 768px) {
+        section {
+          padding: 0 5%;
+        }
+        .overlay {
+          background: rgba(10, 10, 10, 0.8);
+        } /* tối màu nền hơn trên mobile để dễ đọc chữ */
+        .content {
+          padding: 30px 20px;
+        }
+        .content h2 {
+          font-size: 2.2rem;
+          text-align: center;
+        }
+        .content p {
+          font-size: 1.05rem;
+        }
+        .start-title {
+          font-size: 3rem;
+          letter-spacing: 2px;
+        }
+
+        /* đưa timeline xuống dưới cùng */
+        #timeline {
+          left: 50%;
+          top: auto;
+          bottom: 30px;
+          transform: translateX(-50%);
+          flex-direction: row;
+          gap: 30px;
+        }
+        #timeline::before {
+          left: 0;
+          right: 0;
+          top: 4.5px;
+          bottom: auto;
+          width: 100%;
+          height: 1px;
+        }
+        .time-dot::after {
+          left: 50%;
+          top: -35px;
+          transform: translateX(-50%);
+          opacity: 0; /* ẩn text trên mobile khi chưa active */
+        }
+        .time-dot.active::after {
+          opacity: 1;
+          transform: translateX(-50%) scale(0.9);
+        }
+
+        .keyword::before {
+          max-width: 250px;
+          font-size: 0.85rem;
+        }
+      }
+
+      /* tắt con trỏ chuột custom trên thiết bị cảm ứng */
+      @media (hover: none) and (pointer: coarse) {
+        .cursor,
+        .cursor-dot {
+          display: none !important;
+        }
+        body {
+          cursor: auto;
+        }
+        .keyword:hover {
+          cursor: pointer;
+        }
+      }
+
+      #sec1 .bg-image {
+        background-image: url("images/chauai.jpg");
+      }
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       #sec2 .bg-image {
         background-image: url("images/batrieu.jpg");
       }
@@ -553,14 +688,22 @@
         background-image: url("images/lamson.jpg");
       }
       #sec4 .bg-image {
+<<<<<<< HEAD
         background-image: url("images/nhanguyen.jpg");
       }
       #sec5 .bg-image {
         background-image: url("images/songma.jpg");
+=======
+        background-image: url("images/thanhhoa.jpg");
+      }
+      #sec5 .bg-image {
+        background-image: url("images/nhadao.jpg");
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
     </style>
   </head>
   <body>
+<<<<<<< HEAD
     <div class="noise"></div>
     <div class="progress-bar"></div>
     <div class="cursor"></div>
@@ -574,6 +717,11 @@
       </svg>
     </div>
 
+=======
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
     <div id="start-screen">
       <div class="start-title">Ký Ức Xứ Thanh</div>
       <div class="start-hint">Chạm để đánh thức dòng thời gian</div>
@@ -686,7 +834,7 @@
           <span
             class="keyword"
             data-tooltip="Vùng đất cội nguồn phát tích của 3 triều vua (Tiền Lê, Hậu Lê, Nguyễn) và 2 triều chúa (Trịnh, Nguyễn)"
-            >đất căn bản</span
+            >đất bản triều</span
           >, một phên dậu vững chắc bảo vệ sơn hà qua nhiều thời kỳ binh lửa.
         </p>
       </div>
@@ -718,6 +866,7 @@
     <script>
       const cursor = document.querySelector(".cursor");
       const cursorDot = document.querySelector(".cursor-dot");
+<<<<<<< HEAD
       const isTouchDevice = window.matchMedia(
         "(hover: none) and (pointer: coarse)",
       ).matches;
@@ -807,6 +956,43 @@
           isScrolling = true;
         }
       });
+=======
+      document.addEventListener("mousemove", (e) => {
+        if (cursor && cursorDot) {
+          cursor.style.left = e.clientX + "px";
+          cursor.style.top = e.clientY + "px";
+          cursorDot.style.left = e.clientX + "px";
+          cursorDot.style.top = e.clientY + "px";
+        }
+      });
+      document.addEventListener(
+        "mousedown",
+        () =>
+          cursor &&
+          (cursor.style.transform = "translate(-50%, -50%) scale(0.8)"),
+      );
+      document.addEventListener(
+        "mouseup",
+        () =>
+          cursor && (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
+      );
+      document
+        .querySelectorAll(".keyword, .time-dot, #start-screen")
+        .forEach((el) => {
+          el.addEventListener(
+            "mouseenter",
+            () =>
+              cursor &&
+              (cursor.style.transform = "translate(-50%, -50%) scale(1.5)"),
+          );
+          el.addEventListener(
+            "mouseleave",
+            () =>
+              cursor &&
+              (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
+          );
+        });
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
 
       const tickSound = new Audio(
         "data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU",
@@ -881,12 +1067,49 @@
         }
       }
 
+      function fadeAudio(audioOut, audioIn) {
+        if (audioOut) {
+          let vol = audioOut.volume;
+          let fadeOut = setInterval(() => {
+            if (vol > 0.05) {
+              vol -= 0.05;
+              audioOut.volume = vol;
+            } else {
+              clearInterval(fadeOut);
+              audioOut.pause();
+              audioOut.currentTime = 0;
+            }
+          }, 50);
+        }
+        if (audioIn) {
+          audioIn.play().catch((e) => {});
+          let volIn = 0;
+          let fadeIn = setInterval(() => {
+            if (volIn < 0.95) {
+              volIn += 0.05;
+              audioIn.volume = volIn;
+            } else {
+              clearInterval(fadeIn);
+              audioIn.volume = 1;
+            }
+          }, 50);
+        }
+      }
+
       document
         .getElementById("start-screen")
         .addEventListener("click", function () {
           this.classList.add("hidden");
+<<<<<<< HEAD
           document.body.style.cursor = isTouchDevice ? "auto" : "none";
           muteBtn.classList.add("show");
+=======
+          document.body.style.cursor = window.matchMedia(
+            "(hover: none) and (pointer: coarse)",
+          ).matches
+            ? "auto"
+            : "none";
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
           isStarted = true;
           tickSound
             .play()
@@ -895,8 +1118,13 @@
               tickSound.currentTime = 0;
             })
             .catch((e) => {});
+<<<<<<< HEAD
           if (bgmList[currentActiveIndex]) {
             currentBgm = bgmList[currentActiveIndex];
+=======
+          if (bgmList[currentIndex]) {
+            currentBgm = bgmList[currentIndex];
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
             fadeAudio(null, currentBgm);
           }
           document.querySelector("#sec1 .bg-image").classList.add("zoomed");
@@ -915,12 +1143,16 @@
             bgImage.classList.add("zoomed");
 
             const index = parseInt(entry.target.getAttribute("data-index"));
+<<<<<<< HEAD
             if (index !== currentActiveIndex) {
               // reset góc nghiêng của tất cả thẻ cũ
               document.querySelectorAll("section .content").forEach((c) => {
                 c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
               });
 
+=======
+            if (index !== currentIndex) {
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
               dots.forEach((dot) => dot.classList.remove("active"));
               dots[index].classList.add("active");
 
@@ -930,7 +1162,11 @@
                 fadeAudio(currentBgm, bgmList[index]);
                 currentBgm = bgmList[index];
               }
+<<<<<<< HEAD
               currentActiveIndex = index;
+=======
+              currentIndex = index;
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
             }
           } else {
             entry.target.querySelector(".bg-image").classList.remove("zoomed");
@@ -941,6 +1177,21 @@
       document
         .querySelectorAll("section")
         .forEach((sec) => observer.observe(sec));
+<<<<<<< HEAD
+=======
+
+      window.addEventListener("scroll", () => {
+        if (window.innerWidth <= 768) return; // tắt parallax trên mobile cho nhẹ máy
+        document.querySelectorAll("section").forEach((sec) => {
+          const rect = sec.getBoundingClientRect();
+          const bg = sec.querySelector(".bg-image");
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            let scrollOffset = window.pageYOffset - sec.offsetTop;
+            bg.style.transform = `translateY(${scrollOffset * 0.3}px) scale(1.05)`;
+          }
+        });
+      });
+>>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
     </script>
   </body>
 </html>
