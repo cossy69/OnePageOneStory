@@ -27,7 +27,6 @@
         cursor: none;
       }
 
-<<<<<<< HEAD
       .noise {
         position: fixed;
         top: 0;
@@ -124,8 +123,6 @@
         pointer-events: none;
       }
 
-=======
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       .cursor {
         width: 30px;
         height: 30px;
@@ -135,18 +132,11 @@
         pointer-events: none;
         z-index: 10000;
         transition:
-<<<<<<< HEAD
           width 0.2s,
           height 0.2s;
         transform: translate(-50%, -50%);
         mix-blend-mode: difference;
         will-change: transform;
-=======
-          transform 0.15s ease-out,
-          width 0.2s,
-          height 0.2s;
-        transform: translate(-50%, -50%);
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .cursor-dot {
         width: 6px;
@@ -158,10 +148,7 @@
         z-index: 10000;
         transform: translate(-50%, -50%);
         box-shadow: 0 0 10px var(--gold);
-<<<<<<< HEAD
         will-change: transform;
-=======
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
 
       #start-screen {
@@ -225,7 +212,7 @@
         transform: translateY(-50%);
         display: flex;
         flex-direction: column;
-        gap: 50px;
+        gap: 40px;
         z-index: 100;
       }
       #timeline::before {
@@ -243,14 +230,10 @@
         height: 10px;
         border-radius: 50%;
         background: #333;
-<<<<<<< HEAD
         transition:
           transform 0.2s ease,
           background 0.4s,
           box-shadow 0.4s;
-=======
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
         position: relative;
         will-change: transform;
       }
@@ -260,15 +243,12 @@
         left: 30px;
         top: -5px;
         color: #555;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         letter-spacing: 1px;
         transition: all 0.4s ease;
         white-space: nowrap;
         text-transform: uppercase;
-<<<<<<< HEAD
         pointer-events: none;
-=======
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .time-dot.active {
         background: var(--gold);
@@ -290,31 +270,24 @@
         position: relative;
         overflow: hidden;
         scroll-snap-align: center;
-<<<<<<< HEAD
         perspective: 1200px;
-=======
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .bg-image {
         position: absolute;
-        top: -5%;
+        top: -25%;
         left: -5%;
         width: 110%;
-        height: 110%;
+        height: 150%;
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
         z-index: 0;
-<<<<<<< HEAD
         transform: scale(1);
         transition: transform 12s cubic-bezier(0.2, 0.8, 0.2, 1);
         will-change: transform;
       }
       .bg-image.zoomed {
         transform: scale(1.08) !important;
-=======
-        transition: transform 0.5s ease-out;
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .overlay {
         position: absolute;
@@ -335,7 +308,6 @@
         position: relative;
         z-index: 2;
         max-width: 750px;
-<<<<<<< HEAD
         padding: 50px;
         opacity: 0;
         transform: translateY(50px) scale(0.95);
@@ -348,22 +320,6 @@
       .content.visible {
         opacity: 1;
         transform: translateY(0) scale(1) rotateX(0) rotateY(0);
-=======
-        background: rgba(20, 20, 20, 0.2);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 24px;
-        padding: 50px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        opacity: 0;
-        transform: translateY(50px) scale(0.95);
-        transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-      }
-      .content.visible {
-        opacity: 1;
-        transform: translateY(0) scale(1);
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .content h2 {
         color: var(--gold);
@@ -372,10 +328,7 @@
         font-family: "Times New Roman", serif;
         font-weight: 300;
         letter-spacing: 2px;
-<<<<<<< HEAD
         transform: translateZ(40px);
-=======
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .content p {
         font-size: 1.15rem;
@@ -385,6 +338,7 @@
         transform: translateZ(25px);
       }
 
+      /* Sec 1: Đông Sơn (Đồng thau) */
       #sec1 .content {
         background: linear-gradient(
           135deg,
@@ -397,6 +351,8 @@
           inset 0 0 20px rgba(169, 113, 66, 0.2);
         border-radius: 12px;
       }
+
+      /* Sec 2: Bà Triệu (Vát góc đỏ) */
       #sec2 .content {
         background: linear-gradient(
           45deg,
@@ -412,14 +368,33 @@
       #sec2 .content h2 {
         color: #ff6b6b;
       }
+
+      /* Sec 3: Tiền Lê & Nhà Hồ (Đá tảng) */
       #sec3 .content {
+        background: linear-gradient(
+          135deg,
+          rgba(60, 65, 70, 0.85),
+          rgba(30, 35, 40, 0.9)
+        );
+        border: 2px solid #78828a;
+        box-shadow:
+          0 0 30px rgba(120, 130, 138, 0.2),
+          inset 0 0 20px rgba(120, 130, 138, 0.2);
+        border-radius: 8px;
+      }
+      #sec3 .content h2 {
+        color: #c4d0d9;
+      }
+
+      /* Sec 4: Lam Sơn (Góc hoàng gia) */
+      #sec4 .content {
         background: rgba(10, 25, 15, 0.85);
         border: 1px solid rgba(212, 175, 55, 0.3);
         box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
         position: relative;
       }
-      #sec3 .content::before,
-      #sec3 .content::after {
+      #sec4 .content::before,
+      #sec4 .content::after {
         content: "";
         position: absolute;
         width: 50px;
@@ -427,26 +402,51 @@
         border: 3px solid var(--gold);
         pointer-events: none;
       }
-      #sec3 .content::before {
+      #sec4 .content::before {
         top: 15px;
         left: 15px;
         border-right: none;
         border-bottom: none;
       }
-      #sec3 .content::after {
+      #sec4 .content::after {
         bottom: 15px;
         right: 15px;
         border-left: none;
         border-top: none;
       }
-      #sec4 .content {
+
+      /* Sec 5: Phong Kiến (Gỗ mộc) */
+      #sec5 .content {
         background:
           url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2H0v-2h20v-2H0V8h20V6H0V4h20V2H0V0h22v20h2V0h2v20h2V0h2v20h2V0h2v20h2V0h2v20h2v2H20v-1.5zM0 20h2v20H0V20zm4 0h2v20H4V20zm4 0h2v20H8V20zm4 0h2v20h-2V20zm4 0h2v20h-2V20zm4 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2zm0 4h20v2H20v-2z' fill='%238b5a2b' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E"),
           rgba(35, 20, 15, 0.9);
         border: 5px double #8b5a2b;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
       }
-      #sec5 .content {
+
+      /* Sec 6: Kháng Chiến (Lửa đạn) */
+      #sec6 .content {
+        background: linear-gradient(
+          135deg,
+          rgba(45, 15, 5, 0.85),
+          rgba(20, 5, 0, 0.95)
+        );
+        border: 1px solid #ff4500;
+        border-top: 4px solid #ff4500;
+        border-bottom: 4px solid #ff4500;
+        box-shadow: 0 0 40px rgba(255, 69, 0, 0.2);
+        border-radius: 4px;
+      }
+      #sec6 .content h2 {
+        color: #ff8c00;
+      }
+      #sec6 .keyword {
+        color: #ff8c00;
+        border-bottom-color: #ff8c00;
+      }
+
+      /* Sec 7: Hiện Đại (Kính neon) */
+      #sec7 .content {
         background: rgba(10, 20, 35, 0.4);
         backdrop-filter: blur(25px);
         -webkit-backdrop-filter: blur(25px);
@@ -456,15 +456,15 @@
         border-radius: 16px;
         box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
       }
-      #sec5 .content h2 {
+      #sec7 .content h2 {
         color: #00ffff;
         text-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
       }
-      #sec5 .keyword {
+      #sec7 .keyword {
         color: #00ffff;
         border-bottom: 1px solid rgba(0, 255, 255, 0.4);
       }
-      #sec5 .keyword:hover {
+      #sec7 .keyword:hover {
         color: #fff;
         text-shadow: 0 0 10px #00ffff;
       }
@@ -477,12 +477,6 @@
         padding-bottom: 2px;
         position: relative;
         transition: color 0.3s;
-<<<<<<< HEAD
-=======
-      }
-      .keyword:hover {
-        color: var(--gold);
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       }
       .keyword::before {
         content: attr(data-tooltip);
@@ -513,10 +507,6 @@
         transform: translateX(-50%) translateY(0);
       }
 
-<<<<<<< HEAD
-=======
-      /* responsive cho màn hình nhỏ */
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       @media (max-width: 992px) {
         section {
           padding: 0 5% 0 10%;
@@ -527,7 +517,6 @@
         .start-title {
           font-size: 4rem;
         }
-<<<<<<< HEAD
       }
       @media (max-width: 768px) {
         section {
@@ -556,21 +545,20 @@
           bottom: 30px;
           transform: translateX(-50%);
           flex-direction: row;
-          gap: 30px;
+          gap: 20px;
+          flex-wrap: wrap;
+          justify-content: center;
+          width: 90%;
         }
         #timeline::before {
-          left: 0;
-          right: 0;
-          top: 4.5px;
-          bottom: auto;
-          width: 100%;
-          height: 1px;
+          display: none;
         }
         .time-dot::after {
           left: 50%;
-          top: -35px;
+          top: -30px;
           transform: translateX(-50%);
           opacity: 0;
+          font-size: 0.75rem;
         }
         .time-dot.active::after {
           opacity: 1;
@@ -604,106 +592,27 @@
       #sec1 .bg-image {
         background-image: url("images/codai.jpg");
       }
-=======
-      }
-
-      @media (max-width: 768px) {
-        section {
-          padding: 0 5%;
-        }
-        .overlay {
-          background: rgba(10, 10, 10, 0.8);
-        } /* tối màu nền hơn trên mobile để dễ đọc chữ */
-        .content {
-          padding: 30px 20px;
-        }
-        .content h2 {
-          font-size: 2.2rem;
-          text-align: center;
-        }
-        .content p {
-          font-size: 1.05rem;
-        }
-        .start-title {
-          font-size: 3rem;
-          letter-spacing: 2px;
-        }
-
-        /* đưa timeline xuống dưới cùng */
-        #timeline {
-          left: 50%;
-          top: auto;
-          bottom: 30px;
-          transform: translateX(-50%);
-          flex-direction: row;
-          gap: 30px;
-        }
-        #timeline::before {
-          left: 0;
-          right: 0;
-          top: 4.5px;
-          bottom: auto;
-          width: 100%;
-          height: 1px;
-        }
-        .time-dot::after {
-          left: 50%;
-          top: -35px;
-          transform: translateX(-50%);
-          opacity: 0; /* ẩn text trên mobile khi chưa active */
-        }
-        .time-dot.active::after {
-          opacity: 1;
-          transform: translateX(-50%) scale(0.9);
-        }
-
-        .keyword::before {
-          max-width: 250px;
-          font-size: 0.85rem;
-        }
-      }
-
-      /* tắt con trỏ chuột custom trên thiết bị cảm ứng */
-      @media (hover: none) and (pointer: coarse) {
-        .cursor,
-        .cursor-dot {
-          display: none !important;
-        }
-        body {
-          cursor: auto;
-        }
-        .keyword:hover {
-          cursor: pointer;
-        }
-      }
-
-      #sec1 .bg-image {
-        background-image: url("images/chauai.jpg");
-      }
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
       #sec2 .bg-image {
         background-image: url("images/batrieu.jpg");
       }
       #sec3 .bg-image {
-        background-image: url("images/lamson.jpg");
+        background-image: url("images/nhaho.jpg");
       }
       #sec4 .bg-image {
-<<<<<<< HEAD
+        background-image: url("images/lamson.jpg");
+      }
+      #sec5 .bg-image {
         background-image: url("images/nhanguyen.jpg");
       }
-      #sec5 .bg-image {
-        background-image: url("images/songma.jpg");
-=======
-        background-image: url("images/thanhhoa.jpg");
+      #sec6 .bg-image {
+        background-image: url("images/khangchien.jpg");
       }
-      #sec5 .bg-image {
-        background-image: url("images/nhadao.jpg");
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
+      #sec7 .bg-image {
+        background-image: url("images/nghison.jpg");
       }
     </style>
   </head>
   <body>
-<<<<<<< HEAD
     <div class="noise"></div>
     <div class="progress-bar"></div>
     <div class="cursor"></div>
@@ -717,11 +626,6 @@
       </svg>
     </div>
 
-=======
-    <div class="cursor"></div>
-    <div class="cursor-dot"></div>
-
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
     <div id="start-screen">
       <div class="start-title">Ký Ức Xứ Thanh</div>
       <div class="start-hint">Chạm để đánh thức dòng thời gian</div>
@@ -730,8 +634,10 @@
     <div id="timeline">
       <div class="time-dot active" data-year="Sơ khai"></div>
       <div class="time-dot" data-year="TK III"></div>
+      <div class="time-dot" data-year="TK X-XIV"></div>
       <div class="time-dot" data-year="TK XV"></div>
-      <div class="time-dot" data-year="TK XI-XIX"></div>
+      <div class="time-dot" data-year="TK XVI-XIX"></div>
+      <div class="time-dot" data-year="Cận đại"></div>
       <div class="time-dot" data-year="Hiện đại"></div>
     </div>
 
@@ -746,12 +652,7 @@
             class="keyword"
             data-tooltip="Tên gọi cổ của vùng Thanh Hóa - Nghệ An thời kỳ đầu Bắc thuộc"
             >Cửu Chân</span
-          >, sau đó đổi thành
-          <span
-            class="keyword"
-            data-tooltip="Tên gọi phổ biến thời nhà Tùy, nhà Đường"
-            >Châu Ái</span
-          >. Nơi đây là cái nôi của nền
+          >, sau đó đổi thành Châu Ái. Nơi đây là cái nôi của nền
           <span
             class="keyword"
             data-tooltip="Nền văn hóa đồ đá mới rực rỡ cách đây khoảng 6000 năm"
@@ -773,10 +674,10 @@
       <div class="bg-image"></div>
       <div class="overlay"></div>
       <div class="content">
-        <h2>Dấu Ấn Lịch Sử</h2>
+        <h2>Oai Hùng Lạc Tướng</h2>
         <p>
           Trải qua bao thăng trầm, vùng đất Ái Châu đã chứng kiến những cuộc
-          khởi nghĩa oanh liệt. Nổi bật nhất là dấu chân của
+          khởi nghĩa oanh liệt thời Bắc thuộc. Nổi bật nhất là dấu chân của
           <span
             class="keyword"
             data-tooltip="Nữ anh hùng dân tộc Triệu Thị Trinh lãnh đạo khởi nghĩa chống quân Ngô năm 248"
@@ -787,14 +688,36 @@
             class="keyword"
             data-tooltip="Ngọn núi linh thiêng tại Triệu Sơn, nơi Bà Triệu dấy binh khởi nghĩa"
             >núi Nưa</span
-          >, vang vọng lời thề "cưỡi cơn gió mạnh, đạp luồng sóng dữ, chém cá
-          kình ở biển Đông" chứ nhất quyết không chịu cúi đầu làm tì thiếp cho
-          người.
+          >, vang vọng lời thề "cưỡi cơn gió mạnh, đạp luồng sóng dữ" tuyệt đối
+          không chịu cúi đầu làm tì thiếp.
         </p>
       </div>
     </section>
 
     <section id="sec3" data-index="2">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Vang Bóng Hoàng Triều</h2>
+        <p>
+          Bước vào kỷ nguyên độc lập, xứ Thanh tự hào là quê hương của
+          <span
+            class="keyword"
+            data-tooltip="Hoàng đế sáng lập nhà Tiền Lê, anh hùng đánh Tống bình Chiêm"
+            >Lê Đại Hành</span
+          >. Đến thời nhà Hồ, vương triều đã chọn vùng đất Vĩnh Lộc để kiến
+          thiết
+          <span
+            class="keyword"
+            data-tooltip="Kinh đô vương triều Hồ (1400-1407), di sản thế giới xây bằng đá tảng nguyên khối"
+            >Thành Nhà Hồ</span
+          >, một kiệt tác kiến trúc bằng đá tảng sừng sững lưu giữ tham vọng về
+          một quốc gia cường thịnh.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec4" data-index="3">
       <div class="bg-image"></div>
       <div class="overlay"></div>
       <div class="content">
@@ -812,30 +735,8 @@
             >hội thề Lũng Nhai</span
           >
           đã kết nối những anh hùng hào kiệt, nuôi dưỡng ý chí quật cường của Lê
-          Lợi và Nguyễn Trãi, ròng rã mười năm nếm mật nằm gai để đánh đuổi quân
-          Minh, lập nên vương triều nhà Lê huy hoàng.
-        </p>
-      </div>
-    </section>
-
-    <section id="sec4" data-index="3">
-      <div class="bg-image"></div>
-      <div class="overlay"></div>
-      <div class="content">
-        <h2>Danh Xưng Thanh Hóa</h2>
-        <p>
-          Danh xưng "Thanh Hóa" chính thức xuất hiện dưới thời vua
-          <span
-            class="keyword"
-            data-tooltip="Vị vua triều Lý, người đã đổi tên Ái Châu thành Thanh Hóa năm 1029"
-            >Lý Thái Tông</span
-          >. Trải dài đến triều Nguyễn, mảnh đất này luôn đóng vai trò trọng
-          yếu, được xem là
-          <span
-            class="keyword"
-            data-tooltip="Vùng đất cội nguồn phát tích của 3 triều vua (Tiền Lê, Hậu Lê, Nguyễn) và 2 triều chúa (Trịnh, Nguyễn)"
-            >đất bản triều</span
-          >, một phên dậu vững chắc bảo vệ sơn hà qua nhiều thời kỳ binh lửa.
+          Lợi và Nguyễn Trãi, ròng rã mười năm nếm mật nằm gai đánh đuổi quân
+          Minh.
         </p>
       </div>
     </section>
@@ -844,21 +745,65 @@
       <div class="bg-image"></div>
       <div class="overlay"></div>
       <div class="content">
-        <h2>Vươn Mình Hiện Đại</h2>
+        <h2>Danh Xưng Và Cội Nguồn</h2>
         <p>
-          Ngày nay, xứ Thanh đang chuyển mình mạnh mẽ. Người dân nơi đây vừa gìn
-          giữ nét đẹp rêu phong của
+          Danh xưng "Thanh Hóa" chính thức xuất hiện dưới thời vua
           <span
             class="keyword"
-            data-tooltip="Di sản văn hóa thế giới được UNESCO công nhận, xây dựng năm 1397 bằng đá xanh nguyên khối"
-            >Thành Nhà Hồ</span
-          >, vừa tự tin vươn lên xây dựng một trung tâm công nghiệp
+            data-tooltip="Vị vua triều Lý, người đã đổi tên Ái Châu thành Thanh Hóa năm 1029"
+            >Lý Thái Tông</span
+          >. Trải dài đến thời kỳ Trịnh - Nguyễn phân tranh, mảnh đất này khẳng
+          định vị thế là
+          <span
+            class="keyword"
+            data-tooltip="Vùng đất cội nguồn phát tích của 3 triều vua và 2 triều chúa (Trịnh, Nguyễn)"
+            >đất căn bản</span
+          >, nơi nuôi dưỡng cội rễ của những dòng họ định hình toàn bộ cục diện
+          phong kiến Việt Nam.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec6" data-index="5">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Lửa Đạn Và Hoa Hồng</h2>
+        <p>
+          Trong khói lửa thế kỷ 20, Thanh Hóa trở thành hậu phương vững chắc và
+          tiền tuyến kiên cường chống Pháp và Mỹ. Khúc tráng ca
+          <span
+            class="keyword"
+            data-tooltip="Cây cầu huyết mạch bị bom Mỹ oanh tạc dữ dội nhưng không sập, biểu tượng ý chí kiên cường"
+            >cầu Hàm Rồng</span
+          >
+          và
+          <span
+            class="keyword"
+            data-tooltip="Bến phà nối liền quốc lộ 1A, điểm nóng bắn rơi nhiều máy bay địch"
+            >phà Ghép</span
+          >
+          mãi khắc ghi tinh thần thép của những người con xứ Thanh, lấy máu
+          xương che chắn cho huyết mạch nối liền Nam Bắc.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec7" data-index="6">
+      <div class="bg-image"></div>
+      <div class="overlay"></div>
+      <div class="content">
+        <h2>Vươn Mình Hiện Đại</h2>
+        <p>
+          Ngày nay, xứ Thanh đang chuyển mình mạnh mẽ. Người dân nơi đây vừa
+          nâng niu những di sản ngàn năm, vừa xắn tay áo xây dựng một trung tâm
+          công nghiệp
           <span
             class="keyword"
             data-tooltip="Khu kinh tế trọng điểm ven biển với hạt nhân là tổ hợp lọc hóa dầu"
             >Nghi Sơn</span
           >
-          sầm uất và những thành phố du lịch biển ngập tràn sức sống.
+          sầm uất và những thành phố du lịch biển ngập tràn sức sống mới.
         </p>
       </div>
     </section>
@@ -866,7 +811,6 @@
     <script>
       const cursor = document.querySelector(".cursor");
       const cursorDot = document.querySelector(".cursor-dot");
-<<<<<<< HEAD
       const isTouchDevice = window.matchMedia(
         "(hover: none) and (pointer: coarse)",
       ).matches;
@@ -902,7 +846,6 @@
                 activeContent.style.transform = `perspective(1000px) rotateY(${-xAxis}deg) rotateX(${yAxis}deg) scale3d(1.02, 1.02, 1.02)`;
               }
             }
-
             isMoving = false;
           });
           isMoving = true;
@@ -956,43 +899,6 @@
           isScrolling = true;
         }
       });
-=======
-      document.addEventListener("mousemove", (e) => {
-        if (cursor && cursorDot) {
-          cursor.style.left = e.clientX + "px";
-          cursor.style.top = e.clientY + "px";
-          cursorDot.style.left = e.clientX + "px";
-          cursorDot.style.top = e.clientY + "px";
-        }
-      });
-      document.addEventListener(
-        "mousedown",
-        () =>
-          cursor &&
-          (cursor.style.transform = "translate(-50%, -50%) scale(0.8)"),
-      );
-      document.addEventListener(
-        "mouseup",
-        () =>
-          cursor && (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
-      );
-      document
-        .querySelectorAll(".keyword, .time-dot, #start-screen")
-        .forEach((el) => {
-          el.addEventListener(
-            "mouseenter",
-            () =>
-              cursor &&
-              (cursor.style.transform = "translate(-50%, -50%) scale(1.5)"),
-          );
-          el.addEventListener(
-            "mouseleave",
-            () =>
-              cursor &&
-              (cursor.style.transform = "translate(-50%, -50%) scale(1)"),
-          );
-        });
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
 
       const tickSound = new Audio(
         "data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU",
@@ -1002,10 +908,13 @@
       const bgmList = [
         new Audio("audio/codai.mp3"),
         new Audio("audio/batrieu.mp3"),
+        new Audio("audio/nhaho.mp3"),
         new Audio("audio/lamson.mp3"),
         new Audio("audio/nhanguyen.mp3"),
+        new Audio("audio/khangchien.mp3"),
         new Audio("audio/songma.mp3"),
       ];
+
       bgmList.forEach((a) => {
         if (a) {
           a.loop = true;
@@ -1013,103 +922,72 @@
         }
       });
 
-      let currentBgm = null;
       let isStarted = false;
       let isMuted = false;
 
       const muteBtn = document.getElementById("mute-btn");
-      muteBtn.addEventListener("click", () => {
+      muteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
         isMuted = !isMuted;
+
         if (isMuted) {
           muteBtn.innerHTML =
             '<svg viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
-          if (currentBgm) currentBgm.muted = true;
+          bgmList.forEach((a) => {
+            if (a) a.muted = true;
+          });
           tickSound.muted = true;
         } else {
           muteBtn.innerHTML =
             '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
-          if (currentBgm) currentBgm.muted = false;
+          bgmList.forEach((a) => {
+            if (a) a.muted = false;
+          });
           tickSound.muted = false;
         }
       });
 
-      let fadeOutInterval, fadeInInterval;
-      function fadeAudio(audioOut, audioIn) {
-        clearInterval(fadeOutInterval);
-        clearInterval(fadeInInterval);
-
-        if (audioOut) {
-          let vol = audioOut.volume;
-          fadeOutInterval = setInterval(() => {
-            if (vol > 0.05) {
-              vol -= 0.05;
-              audioOut.volume = vol;
+      let audioMasterInterval;
+      function playBgm(targetAudio) {
+        clearInterval(audioMasterInterval);
+        audioMasterInterval = setInterval(() => {
+          let allSettled = true;
+          bgmList.forEach((audio) => {
+            if (!audio) return;
+            if (audio === targetAudio) {
+              if (audio.paused) {
+                audio.muted = isMuted;
+                audio.play().catch((e) => {});
+              }
+              if (audio.volume < 0.95) {
+                audio.volume += 0.05;
+                allSettled = false;
+              } else {
+                audio.volume = 1;
+              }
             } else {
-              clearInterval(fadeOutInterval);
-              audioOut.pause();
-              audioOut.currentTime = 0;
+              if (audio.volume > 0.05) {
+                audio.volume -= 0.05;
+                allSettled = false;
+              } else {
+                audio.volume = 0;
+                if (!audio.paused) {
+                  audio.pause();
+                  audio.currentTime = 0;
+                }
+              }
             }
-          }, 50);
-        }
-        if (audioIn) {
-          audioIn.muted = isMuted;
-          audioIn.play().catch((e) => {});
-          let volIn = 0;
-          fadeInInterval = setInterval(() => {
-            if (volIn < 0.95) {
-              volIn += 0.05;
-              audioIn.volume = volIn;
-            } else {
-              clearInterval(fadeInInterval);
-              audioIn.volume = 1;
-            }
-          }, 50);
-        }
-      }
-
-      function fadeAudio(audioOut, audioIn) {
-        if (audioOut) {
-          let vol = audioOut.volume;
-          let fadeOut = setInterval(() => {
-            if (vol > 0.05) {
-              vol -= 0.05;
-              audioOut.volume = vol;
-            } else {
-              clearInterval(fadeOut);
-              audioOut.pause();
-              audioOut.currentTime = 0;
-            }
-          }, 50);
-        }
-        if (audioIn) {
-          audioIn.play().catch((e) => {});
-          let volIn = 0;
-          let fadeIn = setInterval(() => {
-            if (volIn < 0.95) {
-              volIn += 0.05;
-              audioIn.volume = volIn;
-            } else {
-              clearInterval(fadeIn);
-              audioIn.volume = 1;
-            }
-          }, 50);
-        }
+          });
+          if (allSettled) clearInterval(audioMasterInterval);
+        }, 50);
       }
 
       document
         .getElementById("start-screen")
         .addEventListener("click", function () {
           this.classList.add("hidden");
-<<<<<<< HEAD
           document.body.style.cursor = isTouchDevice ? "auto" : "none";
           muteBtn.classList.add("show");
-=======
-          document.body.style.cursor = window.matchMedia(
-            "(hover: none) and (pointer: coarse)",
-          ).matches
-            ? "auto"
-            : "none";
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
           isStarted = true;
           tickSound
             .play()
@@ -1118,14 +996,9 @@
               tickSound.currentTime = 0;
             })
             .catch((e) => {});
-<<<<<<< HEAD
+
           if (bgmList[currentActiveIndex]) {
-            currentBgm = bgmList[currentActiveIndex];
-=======
-          if (bgmList[currentIndex]) {
-            currentBgm = bgmList[currentIndex];
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
-            fadeAudio(null, currentBgm);
+            playBgm(bgmList[currentActiveIndex]);
           }
           document.querySelector("#sec1 .bg-image").classList.add("zoomed");
         });
@@ -1143,30 +1016,20 @@
             bgImage.classList.add("zoomed");
 
             const index = parseInt(entry.target.getAttribute("data-index"));
-<<<<<<< HEAD
             if (index !== currentActiveIndex) {
-              // reset góc nghiêng của tất cả thẻ cũ
               document.querySelectorAll("section .content").forEach((c) => {
                 c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
               });
 
-=======
-            if (index !== currentIndex) {
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
               dots.forEach((dot) => dot.classList.remove("active"));
               dots[index].classList.add("active");
 
               if (isStarted) {
                 tickSound.currentTime = 0;
                 tickSound.play().catch((e) => {});
-                fadeAudio(currentBgm, bgmList[index]);
-                currentBgm = bgmList[index];
+                playBgm(bgmList[index]);
               }
-<<<<<<< HEAD
               currentActiveIndex = index;
-=======
-              currentIndex = index;
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
             }
           } else {
             entry.target.querySelector(".bg-image").classList.remove("zoomed");
@@ -1177,21 +1040,6 @@
       document
         .querySelectorAll("section")
         .forEach((sec) => observer.observe(sec));
-<<<<<<< HEAD
-=======
-
-      window.addEventListener("scroll", () => {
-        if (window.innerWidth <= 768) return; // tắt parallax trên mobile cho nhẹ máy
-        document.querySelectorAll("section").forEach((sec) => {
-          const rect = sec.getBoundingClientRect();
-          const bg = sec.querySelector(".bg-image");
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
-            let scrollOffset = window.pageYOffset - sec.offsetTop;
-            bg.style.transform = `translateY(${scrollOffset * 0.3}px) scale(1.05)`;
-          }
-        });
-      });
->>>>>>> 8d25877a39e9dd4a7c84ad69a7fce1bd43672408
     </script>
   </body>
 </html>
