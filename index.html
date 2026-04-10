@@ -236,6 +236,7 @@
           box-shadow 0.4s;
         position: relative;
         will-change: transform;
+        cursor: none;
       }
       .time-dot::after {
         content: attr(data-year);
@@ -565,6 +566,7 @@
           transform: translateX(-50%) scale(0.9);
         }
         .mute-btn {
+          cursor: none !important;
           bottom: 100px;
           right: 20px;
           width: 40px;
@@ -632,13 +634,27 @@
     </div>
 
     <div id="timeline">
-      <div class="time-dot active" data-year="Sơ khai"></div>
-      <div class="time-dot" data-year="TK III"></div>
-      <div class="time-dot" data-year="TK X-XIV"></div>
-      <div class="time-dot" data-year="TK XV"></div>
-      <div class="time-dot" data-year="TK XVI-XIX"></div>
-      <div class="time-dot" data-year="Cận đại"></div>
-      <div class="time-dot" data-year="Hiện đại"></div>
+      <a href="#sec1" class="time-dot-wrapper">
+        <div class="time-dot active" data-year="Sơ khai"></div>
+      </a>
+      <a href="#sec2" class="time-dot-wrapper">
+        <div class="time-dot" data-year="TK III"></div>
+      </a>
+      <a href="#sec3" class="time-dot-wrapper">
+        <div class="time-dot" data-year="TK X-XIV"></div>
+      </a>
+      <a href="#sec4" class="time-dot-wrapper">
+        <div class="time-dot" data-year="TK XV"></div>
+      </a>
+      <a href="#sec5" class="time-dot-wrapper">
+        <div class="time-dot" data-year="TK XVI-XIX"></div>
+      </a>
+      <a href="#sec6" class="time-dot-wrapper">
+        <div class="time-dot" data-year="Cận đại"></div>
+      </a>
+      <a href="#sec7" class="time-dot-wrapper">
+        <div class="time-dot" data-year="Hiện đại"></div>
+      </a>
     </div>
 
     <section id="sec1" data-index="0">
@@ -757,7 +773,7 @@
           <span
             class="keyword"
             data-tooltip="Vùng đất cội nguồn phát tích của 3 triều vua và 2 triều chúa (Trịnh, Nguyễn)"
-            >đất bản  triều</span
+            >đất bản triều</span
           >, nơi nuôi dưỡng cội rễ của những dòng họ định hình toàn bộ cục diện
           phong kiến Việt Nam.
         </p>
