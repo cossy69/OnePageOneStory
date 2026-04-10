@@ -24,7 +24,7 @@
         background-color: var(--dark);
         color: var(--text);
         overflow-x: hidden;
-        cursor: none;
+        cursor: none !important;
       }
 
       .noise {
@@ -564,6 +564,9 @@
         .time-dot.active::after {
           opacity: 1;
           transform: translateX(-50%) scale(0.9);
+        }
+        .time-dot-wrapper {
+          cursor: none !important;
         }
         .mute-btn {
           cursor: none !important;
